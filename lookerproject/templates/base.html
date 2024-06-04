@@ -1,0 +1,26 @@
+{% include "header.html" %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400&display=swap">   
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <link rel="stylesheet" href="{% static 'bootstrap/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body style="font-family: 'Quicksand',sans-serif; margin-top: 80px;">
+    {% block content %}
+
+
+    {% endblock %}
+</body>
+</html>
+<script>
+
+    $(document).ready(function(){
+            $(".message").hide(4000);
+        });
+    </script>

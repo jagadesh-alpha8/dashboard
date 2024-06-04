@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-12 text-center">
+            <h1>OUR DIVISION</h1>
+        </div><br>
+        <div class="col-12">
+            <p style="text-align: center;">InGage is a leading provider of immersive technology training solutions and field services tools, for businesses in the manufacturing, construction, and healthcare industries. Our areas of coverage in the ambit of safety solutions include site safety, health safety, fire safety, material handling, operational safety, and the likes of it.</p>
+        </div><br>
+    </div>
+    <div class="row">
+        <form method="post">
+            {% csrf_token %}
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="image-container">
+                    <img src="{% static 'images/edu_tech.png' %}" class="card-img-top corresponding-image" alt="Edu Tech Logo" height="110px" width="200px">
+                    <button type="submit" name="bname" value="edutech" style="background: none; border: none; color: blue; text-decoration: underline; cursor: pointer;">
+                        <img src="{% static 'images/Frame1.png' %}" class="logo-image" alt="...">
+                    </button>
+                </div>
+                <div>
+                    <center><h1>Edu Tech</h1></center>  
+                </div>
+                <div class="card-body">
+                    <p class="card-text" style="text-align: center;">Unlock industry solutions with InGage Edutech! We simplify complex concepts, equipping students, faculty, and professionals with vital, in-demand skills.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="image-container">
+                    <img src="{% static 'images/Ingage_logo.png' %}" class="card-img-top corresponding-image" alt="Ingage Logo" height="65px" width="240px">
+                    <button type="submit" name="bname" value="ingage" style="background: none; border: none; color: blue; text-decoration: underline; cursor: pointer;">
+                    <img src="{% static 'images/Frame2.png' %}" class="logo-image" alt="...">
+                </button> 
+                </div>
+                <div>
+                    <center><h1>Ingage</h1></center>
+                </div>
+                <div class="card-body">
+                    <p class="card-text" style="text-align: center;">InGage offers immersive tech training and field services for manufacturing, construction, and healthcare.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="image-container">
+                    <img src="{% static 'images\ReWin Health Logo.png' %}" class="card-img-top corresponding-image" alt="Ingage Logo" height="20px" width="240px">
+                    <button type="submit" name="bname" value="rewin" style="background: none; border: none; color: blue; text-decoration: underline; cursor: pointer;">
+                    <img src="{% static 'images/Frame3.png' %}" class="logo-image" alt="...">
+                    </button>
+                </div>
+                <div>
+                    <center><h1>ReWin Health</h1></center>
+                </div>
+                <div class="card-body">
+                    <p class="card-text" style="text-align: center;">Rewin: The Revolutionary rehab stroke and muscle app delivering affordable therapy at home, transforming millions in India.</p>
+                </div>
+            </div>
+        </div>
+    </form>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const imageContainers = document.querySelectorAll('.image-container');
+
+    imageContainers.forEach(container => {
+        const correspondingImage = container.querySelector('.corresponding-image');
+        const logoImage = container.querySelector('.logo-image');
+
+        container.addEventListener('mouseover', () => {
+            correspondingImage.style.opacity = '0';
+            logoImage.style.opacity = '1';
+        });
+
+        container.addEventListener('mouseout', () => {
+            correspondingImage.style.opacity = '1';
+            logoImage.style.opacity = '0';
+        });
+    });
+});
+</script>
+{% endblock %}
