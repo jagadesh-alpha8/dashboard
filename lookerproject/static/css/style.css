@@ -244,9 +244,6 @@ h1{
   display: flex;
   justify-content: center;
   align-items: center;
-<<<<<<< HEAD
-}
-=======
   border-radius: 15px;
   transition: all 1000ms;
   font-size: 0px;
@@ -300,5 +297,3 @@ h1{
      inset -4px -4px 6px 0 rgba(255,255,255,.2),
      inset 4px 4px 6px 0 rgba(0, 0, 0, .4);
  }
- 
->>>>>>> 0abb9f3564ccdb1df4f93a271620baad76fe3301
