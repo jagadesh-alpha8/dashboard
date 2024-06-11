@@ -36,7 +36,7 @@ def home(request):
     if request.method == 'POST':
         selected_option = request.POST.get('bname')  
         if selected_option=='edutech':
-            return render(request,'edutech.html')
+            return render(request,'edu1.html')
         elif selected_option=='ingage':
             return render(request,'error.html')
         elif selected_option=='rewin':
