@@ -30,11 +30,11 @@ label {
   color: black;
 }
 
-button {
+.custom-button{
   background-color: #141e30;
 }
 
-.form-container button {
+.form-container .custom-button {
   position: relative;
   display: inline-block;
   padding: 10px 20px;
@@ -48,19 +48,19 @@ button {
   letter-spacing: 4px;
 }
 
-.form-container button:hover {
+.form-container .custom-button:hover {
   background: #03e9f4;
   color: white;
   border-radius: 5px;
   box-shadow: 0 0 5px #03e9f4, 0 0 25px #03e9f4, 0 0 50px #03e9f4, 0 0 100px #03e9f4;
 }
 
-.form-container button span {
+.form-container .custom-button span {
   position: absolute;
   display: block;
 }
 
-.form-container button span:nth-child(1) {
+.form-container .custom-button span:nth-child(1) {
   top: 0;
   left: -100%;
   width: 100%;
@@ -191,8 +191,110 @@ h1{
   font-weight: bold;
 }
 
+/* edu1.html page styles */
+
 .fcard{
+  overflow: hidden;
+  position: relative;
+}
+
+
+.fcard h5{
+  width: 100%;
+  margin: 0;
+  text-align: center;
+  margin-top: 30px;
+  margin-right: 50px;
+  color: rgb(229, 226, 226);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  transition: all 0.4s;
+}
+
+.fcard:hover {
+  border-radius: 15px;
+  cursor: pointer;
+  
+  box-shadow: 0px 0px 10px 5px  rgba(0, 0, 0, 0.705);
+  background: rgb(19, 162, 155);
+}
+.fcard .first-content{
+  height: 279px; 
+  width: 100%; 
+  margin-top: 50px;
+  margin-right: 50px;
+  transition: all 0.4s;
+
+}
+.fcard:hover .first-content {
+  height: 0px;
+  opacity: 0;
+  
+}
+.fcard:hover .card-name{
+  color: #0f0f0f;
+  font-weight: bold;
+  font-size: 2.4rem;
+}
+.second-content {
+  height: 0%;
+  width: 100%;
+  opacity: 0;
   display: flex;
   justify-content: center;
   align-items: center;
+  border-radius: 15px;
+  transition: all 1000ms;
+  font-size: 0px;
+  
 }
+
+.fcard:hover .second-content {
+  opacity: 1;
+  height: 280px;
+  font-size: 1.8rem;
+  transform: rotate(0deg);
+}
+
+/* Card buttons styles */
+
+.custom-btn {
+  width: 130px;
+  height: 40px;
+  color: #f9f9f9;
+  border-radius: 5px;
+  padding: 10px 25px;
+  font-family: 'Lato', sans-serif;
+  font-weight: 500;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  display: inline-block;
+  box-shadow: inset 2px 2px 2px 0px rgba(255,255,255,.5),
+    7px 7px 20px 0px rgba(0,0,0,.1),
+    4px 4px 5px 0px rgba(0,0,0,.1);
+  outline: none;
+ }
+ .custom-btn a{
+  color: #f9f9f9;
+ }
+ .btn-1 {
+  background: rgb(96,9,240);
+  background: linear-gradient(0deg, rgba(96,9,240,1) 0%, rgba(129,5,240,1) 100%);
+  border: none;
+ }
+ 
+ .btn-1:before {
+  height: 0%;
+  width: 2px;
+ }
+ 
+ .btn-1:hover {
+  box-shadow: 4px 4px 6px 0 rgba(255,255,255,.5),
+               -4px -4px 6px 0 rgba(116, 125, 136, .5), 
+     inset -4px -4px 6px 0 rgba(255,255,255,.2),
+     inset 4px 4px 6px 0 rgba(0, 0, 0, .4);
+ }
+ 
