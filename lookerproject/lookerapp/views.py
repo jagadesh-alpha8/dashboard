@@ -35,7 +35,7 @@ def contact(request):
 def home(request):
     if request.method == 'POST':
         selected_option = request.POST.get('bname')  
-        if selected_option=='edutech':
+        if selected_option=='edu1':
             return render(request,'edu1.html')
         elif selected_option=='ingage':
             return render(request,'error.html')
@@ -58,6 +58,6 @@ def edutech(request):
         elif selected_option == 'NM4':
             src="https://lookerstudio.google.com/embed/reporting/e89c7546-11e7-4e0a-9700-b49dc74494a0/page/bZt0D"
             return render(request, 'nmiframe.html', {'src':src})
-      
+    return render(request,"edutech.html")
 
   
