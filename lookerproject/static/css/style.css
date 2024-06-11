@@ -190,3 +190,9 @@ button {
 h1{
   font-weight: bold;
 }
+
+.fcard{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
