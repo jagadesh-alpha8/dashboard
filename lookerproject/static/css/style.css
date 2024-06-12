@@ -262,12 +262,13 @@ h1{
 .custom-btn {
   width: 130px;
   height: 40px;
-  color: #f9f9f9;
+  color: #f12121;
   border-radius: 5px;
   padding: 10px 25px;
   font-family: 'Lato', sans-serif;
   font-weight: 500;
   background: transparent;
+  text-decoration: none;
   cursor: pointer;
   transition: all 0.3s ease;
   position: relative;
@@ -277,13 +278,14 @@ h1{
     4px 4px 5px 0px rgba(0,0,0,.1);
   outline: none;
  }
- .custom-btn a{
-  color: #f9f9f9;
+ .fcard a{
+  color: #a40505
  }
- .btn-1 {
+ .btn-1{
   background: rgb(96,9,240);
   background: linear-gradient(0deg, rgba(96,9,240,1) 0%, rgba(129,5,240,1) 100%);
   border: none;
+  color: #a40505;
  }
  
  .btn-1:before {
