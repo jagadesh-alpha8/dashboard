@@ -262,7 +262,7 @@ h1{
 .custom-btn {
   width: 130px;
   height: 40px;
-  color: #f12121;
+  color: #edebeb;
   border-radius: 5px;
   padding: 10px 25px;
   font-family: 'Lato', sans-serif;
@@ -279,13 +279,13 @@ h1{
   outline: none;
  }
  .fcard a{
-  color: #a40505
+  color: #d6cece
  }
  .btn-1{
   background: rgb(96,9,240);
   background: linear-gradient(0deg, rgba(96,9,240,1) 0%, rgba(129,5,240,1) 100%);
   border: none;
-  color: #a40505;
+  color: #ded7d7;
  }
  
  .btn-1:before {
