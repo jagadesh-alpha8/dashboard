@@ -60,4 +60,6 @@ def edutech(request):
             return render(request, 'nmiframe.html', {'src':src})
     return render(request,"edutech.html")
 
-  
+
+def finance(request):
+    return render(request, 'finance.html')
