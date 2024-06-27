@@ -15,10 +15,11 @@
             <img id="photoElement" style="display: none;">
             <br><br>
             <!-- Add a text input for description -->
-            <input type="text" id="description" placeholder="Enter college name">
+            <input type="text" id="description" placeholder="Enter college name" value="College">
             <button id="uploadButton" disabled>Upload Photo</button>
         </div>
     </div>
+    
     <script>
         const videoElement = document.getElementById('videoElement');
         const canvasElement = document.getElementById('canvasElement');
@@ -91,7 +92,7 @@
                 const timestamp = new Date().toISOString();
                 const description = descriptionInput.value; // Get the description value
     
-                const response = await fetch("{% url 'save_photo' %}", {
+                const response = await fetch("{% url 'trainer' %}", {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -124,4 +125,5 @@
         captureButton.addEventListener('click', capturePhoto);
         uploadButton.addEventListener('click', uploadPhoto);
     </script>
+    
 {% endblock %}
