@@ -9,7 +9,6 @@ import io
 from datetime import datetime
 from PIL import Image
 from django.core.files.base import ContentFile
-from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from .models import CapturedPhoto
 import json
