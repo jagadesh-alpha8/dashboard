@@ -47,6 +47,8 @@ fqdn==1.5.1
 frozenlist==1.4.1
 fsspec==2024.5.0
 fuzzywuzzy==0.18.0
+geographiclib==2.0
+geopy==2.4.1
 google==3.0.0
 google-api-core==2.18.0
 google-api-python-client==2.126.0
