@@ -3,12 +3,16 @@
 <nav class="navbar navbar-primary navbar-fixed-top custom-color" style="height: 90px;">
     <div class="container-fluid">
         <div class="navbar-header">
-          
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#myNavbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
             <a class="navbar-brand" href="https://www.myingage.com/" target="_blank"><img src="{% static 'images/Ingage_logo.png' %}" alt="Ingage Logo" width="200" height="55" class="img-fluid" /></a>
         </div>
-        <div class="collapse navbar-collapse" id="myNavbar" spellcheck="margin-top: 10px;">
+        <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav navbar-right" style="font-weight: bold;">
-               
                 {% if user.is_authenticated and request.path != '/' and request.path != '/password_reset/' %}
                 <li>
                    <a href="{% url 'home' %}">Home</a>
@@ -26,9 +30,9 @@
                     <a href="{% url 'trainer' %}">Trainer</a>
                 </li>
                 {% endif %}
-                    <li>
-                        <a href="{% url 'logout' %}">Logout</a>
-                    </li>
+                <li>
+                    <a href="{% url 'logout' %}">Logout</a>
+                </li>
                 {% endif %}
             </ul>
         </div>
