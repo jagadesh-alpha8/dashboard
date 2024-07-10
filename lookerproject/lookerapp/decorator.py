@@ -1,5 +1,6 @@
 from functools import wraps
 from django.http import HttpResponseForbidden
+from django.shortcuts import render
 
 def group_required(groups=[]):
     def decorator(view_func):
@@ -8,6 +9,7 @@ def group_required(groups=[]):
             if request.user.is_authenticated and any(request.user.groups.filter(name=group).exists() for group in groups):
                 return view_func(request, *args, **kwargs)
             else:
-                return HttpResponseForbidden("You do not have permission to access this page.")
+                # return HttpResponseForbidden("You do not have permission to access this page.")
+                return render(request,'forbidden.html')
         return wrapper
     return decorator

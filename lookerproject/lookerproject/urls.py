@@ -34,7 +34,6 @@ urlpatterns = [
     path('home/',views.home,name='home'),
     path('contact/',views.contact,name='contact'),
     path('edutech/',views.edutech,name='edutech'),
-    path('fin/',views.finance,name='finance'),
     path('trainer',views.trainer,name='trainer'),
     path('filter/', views.filter_photos, name='filter_photos'),
     path('password_reset/', auth_views.PasswordResetView.as_view(template_name='registration/password_reset_form.html'), name='password_reset'),
