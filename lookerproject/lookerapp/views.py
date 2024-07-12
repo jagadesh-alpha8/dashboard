@@ -25,16 +25,25 @@ def user_login(request):
 
 def login_view(request):
     if request.user.is_authenticated:
-        return redirect('home')
+        if request.user.groups.filter(name='nm').exists():
+            return redirect('edutech')
+        else:
+            return redirect('home')
+    
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
         user = authenticate(request, username=username, password=password)
+        
         if user is not None:
             login(request, user)
-            return redirect('home')
+            if user.groups.filter(name='nm').exists():
+                return redirect('edutech')
+            else:
+                return redirect('home')
         else:
             messages.error(request, 'Invalid Username or Password')
+    
     return render(request, 'login.html')
 
 def logout_view(request):
@@ -45,11 +54,12 @@ def contact(request):
     return render(request, 'error.html')
 
 @login_required
+@group_required(groups=['trainer','coordinator'])
 def home(request):
     if request.method == 'POST':
         selected_option = request.POST.get('bname')
         if selected_option == 'edu1':
-            return render(request, 'edu1.html')
+            return render(request, 'edutech.html')
         elif selected_option == 'ingage':
             return render(request, 'error.html')
         elif selected_option == 'rewin':
@@ -57,6 +67,7 @@ def home(request):
     return render(request, 'home.html')
 
 @login_required
+@group_required(groups=['trainer','coordinator','nm'])
 def edutech(request):
     if request.method == 'POST':
         selected_option = request.POST.get('nm')
@@ -75,6 +86,7 @@ def edutech(request):
     return render(request, "edutech.html")
 
 @login_required
+@group_required(groups=['coordinator'])
 def finance(request):
     return render(request, 'finance.html')
 

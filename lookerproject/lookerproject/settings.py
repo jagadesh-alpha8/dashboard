@@ -159,7 +159,7 @@ EMAIL_HOST_PASSWORD = 'Orange@143'  # Your email password (consider using enviro
 
 
 
-SESSION_COOKIE_AGE =   1800
+SESSION_COOKIE_AGE =   18000
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 
