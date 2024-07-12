@@ -18,7 +18,7 @@
             <div class="card">
                 <div class="image-container">
                     <button type="submit" name="bname" value="edu1" style="background: none; border: none; text-decoration: underline; cursor: pointer; height: 300px; width: 400px;">
-                        <img src="{% static 'images/edu_tech.png' %}"  alt="Edu Tech Logo" height="110px" width="200px" > 
+                        <img src="{% static 'images/edu_tech.png' %}"  alt="Edu Tech Logo" height="110px" width="200px" class="logo">
                     </button>
                 </div>
                 <div>
@@ -34,7 +34,7 @@
             <div class="card">
                 <div class="image-container">
                     <button type="submit" name="bname" value="ingage" style="background: none; border: none; text-decoration: underline; cursor: pointer; height: 300px; width: 400px;">
-                        <img src="{% static 'images/Ingage_logo.png' %}" alt="Ingage Logo" height="65px" width="240px">
+                        <img src="{% static 'images/Ingage_logo.png' %}" alt="Ingage Logo" height="65px" width="240px" class="logo">
                 </button> 
                 </div>
                 <div>
@@ -50,7 +50,7 @@
             <div class="card">
                 <div class="image-container">
                     <button type="submit" name="bname" value="rewin" style="background: none; border: none; text-decoration: underline; cursor: pointer;height: 300px; width: 400px;">
-                        <img src="{% static 'images\ReWin Health Logo.png' %}"  alt="Ingage Logo" height="20px" width="240px">
+                        <img src="{% static 'images/ReWin Health Logo.png' %}"  alt="ReWin Health Logo" height="20px" width="240px" class="logo">
                     </button>
                 </div>
                 <div>
@@ -64,4 +64,15 @@
     </form>
     </div>
 </div>
+
+<style>
+    .logo {
+        transition: transform 0.3s ease; /* Smooth transition for the scaling effect */
+    }
+
+    button:hover .logo {
+        transform: scale(1.1); /* Scale the image by 10% */
+    }
+</style>
+
 {% endblock %}

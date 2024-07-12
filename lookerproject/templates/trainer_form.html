@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
-<div class="container-fluid">
+<div class="container-fluid webcam-container">
     <div class="row">
         <div class="col-md-6">
             <h1>Webcam Capture</h1>
@@ -13,12 +13,78 @@
             <h1>Captured Photo</h1>
             <canvas id="canvasElement" style="display: none;"></canvas>
             <img id="photoElement" style="display: none;">
-            <br><br>
+            <br>
             <!-- Add a text input for description -->
             <input type="text" id="description" placeholder="Enter college name" value="College">
             <button id="uploadButton" disabled>Upload Photo</button>
         </div>
     </div>
+
+    <style>
+        .webcam-container {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        .webcam-container h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .webcam-container .row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .webcam-container .col-md-6 {
+            margin: 10px;
+            text-align: center;
+        }
+
+        .webcam-container video, .webcam-container canvas, .webcam-container img {
+            max-width: 100%;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .webcam-container button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .webcam-container button:hover {
+            background-color: #45a049;
+        }
+
+        .webcam-container #uploadButton:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .webcam-container input[type="text"] {
+            padding: 10px;
+            margin: 5px 0;
+            box-sizing: border-box;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .webcam-container input[type="text"]:focus {
+            border-color: #4CAF50;
+        }
+    </style>
     
     <script>
         const videoElement = document.getElementById('videoElement');
@@ -125,5 +191,5 @@
         captureButton.addEventListener('click', capturePhoto);
         uploadButton.addEventListener('click', uploadPhoto);
     </script>
-    
+</div>
 {% endblock %}
