@@ -15,9 +15,9 @@ class CapturedPhoto(models.Model):
     def __str__(self):
         return self.description or "Captured Photo"
 
-    def delete(self, *args, **kwargs):
-        # Delete the image file from the media folder
-        if self.image:
-            if os.path.isfile(self.image.path):
-                os.remove(self.image.path)
-        super(CapturedPhoto, self).delete(*args, **kwargs)
+    # def delete(self, *args, **kwargs):
+    #     # Delete the image file from the media folder
+    #     if self.image:
+    #         if os.path.isfile(self.image.path):
+    #             os.remove(self.image.path)
+    #     super(CapturedPhoto, self).delete(*args, **kwargs)
