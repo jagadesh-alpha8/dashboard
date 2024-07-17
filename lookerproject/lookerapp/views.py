@@ -185,3 +185,9 @@ def export_photos_to_csv(photos):
         writer.writerow([photo.user.username, photo.timestamp, photo.description, photo.latitude, photo.longitude])
 
     return response
+
+
+
+def csrf_failure(request, reason=""):
+    # return render(request, 'error.html', {'reason': reason})
+    return redirect('login')

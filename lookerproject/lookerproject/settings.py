@@ -63,7 +63,7 @@ ROOT_URLCONF = 'lookerproject.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR,'templates'],
+        'DIRS': [os.path.join(BASE_DIR,'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -154,14 +154,15 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'  # Use your SMTP provider
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'jagadesh.v@myingage.com'  # Your email address
-EMAIL_HOST_PASSWORD = 'Orange@143'  # Your email password (consider using environment variables for security)
+EMAIL_HOST_USER = 'jonnathan3616@gmail.com'  # Your email address
+EMAIL_HOST_PASSWORD = 'gmdm xmam fvgj jtwf'  # Your email password (consider using environment variables for security)
 
 
 
 SESSION_COOKIE_AGE =   18000
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+SESSION_SAVE_EVERY_REQUEST = True
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
@@ -192,3 +193,5 @@ CSRF_COOKIE_SECURE = True
 SECURE_BROWSER_XSS_FILTER = True
 X_FRAME_OPTIONS = 'DENY'
 
+
+CSRF_FAILURE_VIEW = 'lookerapp.views.csrf_failure'
