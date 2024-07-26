@@ -83,6 +83,9 @@ def edutech(request):
         elif selected_option == 'NM4':
             src = "https://lookerstudio.google.com/embed/reporting/e89c7546-11e7-4e0a-9700-b49dc74494a0/page/bZt0D"
             return render(request, 'nmiframe.html', {'src': src})
+        elif selected_option == 'NM5':
+            src = ""
+            return render(request, 'nmiframe.html', {'src': src})
     return render(request, "edutech.html")
 
 @login_required
@@ -191,3 +194,31 @@ def export_photos_to_csv(photos):
 def csrf_failure(request, reason=""):
     # return render(request, 'error.html', {'reason': reason})
     return redirect('login')
+
+
+
+
+# import pandas as pd
+
+# df = pd.read_excel(r"C:\Users\ingag\OneDrive\Desktop\Login ID's.xlsx")
+
+# from django.contrib.auth.models import User, Group
+
+# # Ensure the group exists
+# group = Group.objects.get(name='trainer')
+
+# for index, row in df.iterrows():
+#     username = row['user_id']
+    
+#     if not User.objects.filter(username=username).exists():
+#         user = User.objects.create_user(
+#             username=username,
+#             password=str(row['password']),  # Convert password to string
+#             first_name=row['first_name'],
+#             last_name=row['last_name'],
+#             email=row['email']
+#         )
+#         # Add the user to the group
+#         user.groups.add(group)
+#     else:
+#         print(f"User {username} already exists.")
