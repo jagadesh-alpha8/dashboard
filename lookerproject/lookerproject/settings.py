@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'lookerapp',
     'crispy_forms',
     'crispy_bootstrap4',
+    'import_export',
  
 ]
 
@@ -98,18 +99,18 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
-    # {
-    #     'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    # },
+    {
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+    },
     # {
     #     'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
     # },
     # {
     #     'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     # },
-     {
-        'NAME': 'lookerapp.validators.NumericPasswordValidator',  # Add this line
-    },
+    #  {
+    #     'NAME': 'lookerapp.validators.NumericPasswordValidator',  # Add this line
+    # },
 ]
 
 
