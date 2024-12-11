@@ -84,7 +84,7 @@ def edutech(request):
             src = "https://lookerstudio.google.com/embed/reporting/e89c7546-11e7-4e0a-9700-b49dc74494a0/page/bZt0D"
             return render(request, 'nmiframe.html', {'src': src})
         elif selected_option == 'NM5':
-            src = ""
+            src = "https://lookerstudio.google.com/embed/reporting/6203b49a-b91c-4aba-b1b5-d79b62cf55cc/page/p_5wzb6wkshd"
             return render(request, 'nmiframe.html', {'src': src})
     return render(request, "edutech.html")
 
