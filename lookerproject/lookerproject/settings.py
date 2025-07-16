@@ -35,7 +35,7 @@ INSTALLED_APPS = [
     'lookerapp',
     'crispy_forms',
     'crispy_bootstrap4',
-    'import_export',
+    # 'import_export',
  
 ]
 

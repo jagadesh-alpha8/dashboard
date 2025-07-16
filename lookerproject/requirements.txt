@@ -3,4 +3,4 @@ Pillow==10.4.0
 python_dateutil==2.8.2
 crispy-bootstrap4==2024.1
 django-crispy-forms==2.1
-django-admin-import-export
+# django-admin-import-export
