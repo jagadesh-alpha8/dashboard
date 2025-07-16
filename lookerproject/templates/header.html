@@ -2,35 +2,59 @@
 {% load custom_filters %}
 <nav class="navbar navbar-primary navbar-fixed-top custom-color" style="height: 90px;">
     <div class="container-fluid">
+        <!-- Left Logo -->
         <div class="navbar-header">
-            <a class="navbar-brand" href="https://www.myingage.com/" target="_blank"><img src="{% static 'images/Ingage_logo.png' %}" alt="Ingage Logo" width="200" height="55" class="img-fluid" /></a>
+            <a class="navbar-brand" href="https://www.myingage.com/" target="_blank">
+                <img src="{% static 'images/Ingage_logo.png' %}" alt="Ingage Logo" width="200" height="55" class="img-fluid" />
+            </a>
         </div>
-        <div class="collapse navbar-collapse" id="myNavbar">
-            <ul class="nav navbar-nav navbar-right" style="font-weight: bold;">
-                {% if user.is_authenticated and request.path != '/' and request.path != '/password_reset/' %}
+
+        <!-- Center Dropdown -->
+       <ul class="nav navbar-nav center-nav" style="position: absolute; left: 50%; transform: translateX(-50%); font-weight: bold;">
+      {% if user.is_authenticated and request.path != '/' and request.path != '/password_reset/' and request.path == '/edutech/'%}
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+          NM <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu">
+          <li><a href="#" onclick="event.preventDefault(); document.getElementById('form-nm1').submit();">NM 1</a></li>
+          <li><a href="#" onclick="event.preventDefault(); document.getElementById('form-nm2').submit();">NM 2</a></li>
+          <li><a href="#" onclick="event.preventDefault(); document.getElementById('form-nm3').submit();">NM 3</a></li>
+          <li><a href="#" onclick="event.preventDefault(); document.getElementById('form-nm4').submit();">NM 4</a></li>
+          <li><a href="#" onclick="event.preventDefault(); document.getElementById('form-nm5').submit();">NM 5</a></li>
+          <li><a href="#" onclick="event.preventDefault(); document.getElementById('form-nm6').submit();">NM 6</a></li>
+        </ul>
+      </li>
+      {% endif %}
+    </ul>
+
+    <!-- Hidden forms -->
+    <form method="post" action="{% url 'edutech' %}" id="form-nm1" style="display:none;">{% csrf_token %}<input type="hidden" name="nm" value="NM1" /></form>
+    <form method="post" action="{% url 'edutech' %}" id="form-nm2" style="display:none;">{% csrf_token %}<input type="hidden" name="nm" value="NM2" /></form>
+    <form method="post" action="{% url 'edutech' %}" id="form-nm3" style="display:none;">{% csrf_token %}<input type="hidden" name="nm" value="NM3" /></form>
+    <form method="post" action="{% url 'edutech' %}" id="form-nm4" style="display:none;">{% csrf_token %}<input type="hidden" name="nm" value="NM4" /></form>
+    <form method="post" action="{% url 'edutech' %}" id="form-nm5" style="display:none;">{% csrf_token %}<input type="hidden" name="nm" value="NM5" /></form>
+    <form method="post" action="{% url 'edutech' %}" id="form-nm6" style="display:none;">{% csrf_token %}<input type="hidden" name="nm" value="NM6" /></form>
+
+        <!-- Right Menu -->
+        <ul class="nav navbar-nav navbar-right" style="font-weight: bold;">
+            {% if user.is_authenticated and request.path != '/' and request.path != '/password_reset/' %}
                 {% if user|has_any_group:"coordinator,trainer" %}
-                <li>
-                   <a href="{% url 'home' %}">Home</a>
-                </li>
+                <li><a href="{% url 'home' %}">Home</a></li>
                 {% endif %}
-                <li>
-                    <a href="{% url 'contact' %}">Contact</a>
-                </li>
+                <li><a href="{% url 'contact' %}">Contact</a></li>
                 {% if user|has_group:"coordinator" %}
-                <li>
-                    <a href="{% url 'filter_photos' %}">Coordinator</a>
-                </li>
+                <li><a href="{% url 'filter_photos' %}">Coordinator</a></li>
                 {% endif %}
                 {% if user|has_group:"trainer" %}
-                <li>
-                    <a href="{% url 'trainer' %}">Trainer</a>
-                </li>
+                <li><a href="{% url 'trainer' %}">Trainer</a></li>
                 {% endif %}
-                <li>
-                    <a href="{% url 'logout' %}">Logout</a>
-                </li>
-                {% endif %}
-            </ul>
-        </div>
+                <li><a href="{% url 'logout' %}">Logout</a></li>
+            {% endif %}
+        </ul>
     </div>
 </nav>
+
+<script>
+  console.log('jQuery version:', $.fn.jquery);
+</script>

@@ -25,19 +25,19 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-q3q!7z2ot8s!j5-5onxl@p%d(-jq(!9cx23(li0iq360uwzay('
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
+# ALLOWED_HOSTS = ['*']
 
 if DEBUG:
     ALLOWED_HOSTS = ['*']
 else:
-    ALLOWED_HOSTS = ['dashboard.myingage.com']
+    ALLOWED_HOSTS = ['ingagemetaverse.in', 'www.ingagemetaverse.in',]
 
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -111,9 +111,9 @@ AUTH_PASSWORD_VALIDATORS = [
     # {
     #     'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     # },
-     {
-        'NAME': 'lookerapp.validators.NumericPasswordValidator',  # Add this line
-    },
+    #  {
+    #     'NAME': 'lookerapp.validators.NumericPasswordValidator',  # Add this line
+    # },
 ]
 
 
@@ -189,9 +189,9 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', secrets.token_urlsafe(50))
 SECURE_HSTS_SECONDS = 31536000
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
-SECURE_SSL_REDIRECT = False
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
+# SECURE_SSL_REDIRECT = False
+# SESSION_COOKIE_SECURE = True
+# CSRF_COOKIE_SECURE = True
 
 # Other security settings
 SECURE_BROWSER_XSS_FILTER = True
