@@ -54,17 +54,30 @@ def contact(request):
     return render(request, 'error.html')
 
 @login_required
-@group_required(groups=['trainer','coordinator'])
+@group_required(groups=['trainer','coordinator','hcl'])
 def home(request):
     if request.method == 'POST':
         selected_option = request.POST.get('bname')
         if selected_option == 'edu1':
-            return render(request, 'edutech.html')
-        elif selected_option == 'ingage':
-            return render(request, 'error.html')
-        elif selected_option == 'rewin':
-            return render(request, 'error.html')
+            return render(request, 'edu.html')
+        # elif selected_option == 'ingage':
+        #     return render(request, 'error.html')
+        # elif selected_option == 'rewin':
+        #     return render(request, 'error.html')
     return render(request, 'home.html')
+
+@login_required
+@group_required(groups=['trainer','coordinator','nm'])
+def edu(request):
+        if request.method == 'POST':
+            selected_option = request.POST.get('type')
+            if selected_option == 'NM':
+                return render(request, "edutech.html")
+            elif selected_option == 'train':
+                return render(request, "error.html")
+            elif selected_option == 'value':
+                return render(request, "error.html")
+
 
 @login_required
 @group_required(groups=['trainer','coordinator','nm'])
@@ -90,12 +103,10 @@ def edutech(request):
             src = "https://lookerstudio.google.com/embed/reporting/b1370de1-7a23-44e1-b11a-0971fb45f7c8/page/p_5wzb6wkshd"
             return render(request, 'nmiframe.html', {'src': src})
         
+        
     return render(request, "edutech.html")
 
-@login_required
-@group_required(groups=['coordinator'])
-def finance(request):
-    return render(request, 'finance.html')
+
 
 @login_required
 @group_required(groups=['trainer'])
