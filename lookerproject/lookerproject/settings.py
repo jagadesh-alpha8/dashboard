@@ -19,7 +19,7 @@ DEBUG = True
 if DEBUG:
     ALLOWED_HOSTS = ['*']
 else:
-    ALLOWED_HOSTS = ['ingagemetaverse.in', 'www.ingagemetaverse.in',]
+    ALLOWED_HOSTS = ['43.205.66.242','ingagemetaverse.in', 'www.ingagemetaverse.in',]
 
 
 
@@ -35,7 +35,6 @@ INSTALLED_APPS = [
     'lookerapp',
     'crispy_forms',
     'crispy_bootstrap4',
-    # 'import_export',
  
 ]
 
@@ -122,10 +121,6 @@ USE_TZ = True
 STATIC_URL = 'static/'
 MEDIA_URL = '/media/'
 
-# if DEBUG:
-#   STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-# else:
-#   STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
@@ -159,16 +154,6 @@ SESSION_SAVE_EVERY_REQUEST = True
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 
-JAZZMIN_SETTINGS = {
-    "site_title": "My Site Admin",
-    "site_header": "My Site",
-    "site_brand": "My Site",
-    "welcome_sign": "Welcome to the admin panel!",
-    "copyright": "My Site © 2024",
-    "user_avatar": None,
-}
-
-
 import os
 import secrets
 
@@ -177,7 +162,7 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', secrets.token_urlsafe(50))
 SECURE_HSTS_SECONDS = 31536000
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
-SECURE_SSL_REDIRECT = True
+SECURE_SSL_REDIRECT = False
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 
@@ -187,3 +172,6 @@ X_FRAME_OPTIONS = 'DENY'
 
 
 CSRF_FAILURE_VIEW = 'lookerapp.views.csrf_failure'
+
+
+LOGIN_REDIRECT_URL='/home/'
