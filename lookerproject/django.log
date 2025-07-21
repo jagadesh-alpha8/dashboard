@@ -1,0 +1,68 @@
+INFO 2025-07-19 11:31:58,736 autoreload 22032 10192 Watching for file changes with StatReloader
+INFO 2025-07-19 11:32:17,195 autoreload 22032 10192 C:\Users\Jegadeesh\Desktop\dashboard\lookerproject\lookerproject\urls.py changed, reloading.
+INFO 2025-07-19 11:32:18,214 autoreload 14080 20180 Watching for file changes with StatReloader
+INFO 2025-07-19 11:32:19,349 views 14080 384 Login view accessed. User authenticated: False
+INFO 2025-07-19 11:32:19,372 basehttp 14080 384 "GET / HTTP/1.1" 200 5164
+INFO 2025-07-19 11:32:19,590 basehttp 14080 13212 "GET /static/images/meta.png HTTP/1.1" 200 169766
+INFO 2025-07-19 11:32:19,596 basehttp 14080 384 "GET /static/images/Ingage_logo.png HTTP/1.1" 200 28570
+INFO 2025-07-19 11:32:19,601 basehttp 14080 22124 "GET /static/bootstrap/bootstrap.min.css HTTP/1.1" 200 121462
+INFO 2025-07-19 11:32:19,607 basehttp 14080 22652 "GET /static/css/style.css HTTP/1.1" 200 5743
+WARNING 2025-07-19 11:32:19,934 log 14080 22652 Not Found: /favicon.ico
+WARNING 2025-07-19 11:32:19,935 basehttp 14080 22652 "GET /favicon.ico HTTP/1.1" 404 4056
+INFO 2025-07-19 11:32:24,087 views 14080 22652 Login view accessed. User authenticated: False
+INFO 2025-07-19 11:32:24,088 views 14080 22652 Login attempt for username: admin
+INFO 2025-07-19 11:32:24,582 views 14080 22652 Authentication successful for user: admin
+INFO 2025-07-19 11:32:24,601 views 14080 22652 User admin logged in successfully
+INFO 2025-07-19 11:32:24,603 views 14080 22652 User admin not in 'nm' group, redirecting to home
+INFO 2025-07-19 11:32:24,611 basehttp 14080 22652 "POST /login/ HTTP/1.1" 302 0
+INFO 2025-07-19 11:32:24,635 basehttp 14080 22652 "GET /home/ HTTP/1.1" 200 3750
+INFO 2025-07-19 11:32:27,900 views 14080 22652 Logout requested for user: admin
+INFO 2025-07-19 11:32:27,912 views 14080 22652 User admin logged out successfully
+INFO 2025-07-19 11:32:27,913 basehttp 14080 22652 "GET /logout/ HTTP/1.1" 302 0
+INFO 2025-07-19 11:32:27,917 views 14080 22652 Login view accessed. User authenticated: False
+INFO 2025-07-19 11:32:27,919 basehttp 14080 22652 "GET /login/ HTTP/1.1" 200 5164
+INFO 2025-07-19 11:32:33,984 views 14080 22652 Login view accessed. User authenticated: False
+INFO 2025-07-19 11:32:33,984 views 14080 22652 Login attempt for username: ingage
+INFO 2025-07-19 11:32:34,493 views 14080 22652 Authentication successful for user: ingage
+INFO 2025-07-19 11:32:34,514 views 14080 22652 User ingage logged in successfully
+INFO 2025-07-19 11:32:34,516 views 14080 22652 User ingage not in 'nm' group, redirecting to home
+INFO 2025-07-19 11:32:34,522 basehttp 14080 22652 "POST /login/ HTTP/1.1" 302 0
+INFO 2025-07-19 11:32:34,535 views 14080 22652 Home view accessed by user: ingage
+INFO 2025-07-19 11:32:34,536 views 14080 22652 Rendering home.html for user: ingage
+INFO 2025-07-19 11:32:34,551 basehttp 14080 22652 "GET /home/ HTTP/1.1" 200 5470
+INFO 2025-07-19 11:32:34,584 basehttp 14080 22652 "GET /static/images/edu_tech.png HTTP/1.1" 200 83175
+INFO 2025-07-19 11:32:35,490 views 14080 22652 Home view accessed by user: ingage
+INFO 2025-07-19 11:32:35,490 views 14080 22652 POST request to home with option: edu1
+INFO 2025-07-19 11:32:35,510 basehttp 14080 22652 "POST /home/ HTTP/1.1" 200 5447
+INFO 2025-07-19 11:32:41,416 views 14080 22652 Logout requested for user: ingage
+INFO 2025-07-19 11:32:41,428 views 14080 22652 User ingage logged out successfully
+INFO 2025-07-19 11:32:41,430 basehttp 14080 22652 "GET /logout/ HTTP/1.1" 302 0
+INFO 2025-07-19 11:32:41,434 views 14080 22652 Login view accessed. User authenticated: False
+INFO 2025-07-19 11:32:41,436 basehttp 14080 22652 "GET /login/ HTTP/1.1" 200 5164
+INFO 2025-07-19 11:32:46,633 views 14080 22652 Login view accessed. User authenticated: False
+INFO 2025-07-19 11:32:46,633 views 14080 22652 Login attempt for username: nmuser
+WARNING 2025-07-19 11:32:47,120 views 14080 22652 Authentication failed for username: nmuser
+INFO 2025-07-19 11:32:47,124 basehttp 14080 22652 "POST /login/ HTTP/1.1" 200 5385
+INFO 2025-07-19 11:32:51,413 views 14080 22652 Login view accessed. User authenticated: False
+INFO 2025-07-19 11:32:51,414 views 14080 22652 Login attempt for username: nm
+WARNING 2025-07-19 11:32:51,907 views 14080 22652 Authentication failed for username: nm
+INFO 2025-07-19 11:32:51,909 basehttp 14080 22652 "POST /login/ HTTP/1.1" 200 5385
+INFO 2025-07-19 11:33:21,515 views 14080 7208 Login view accessed. User authenticated: False
+INFO 2025-07-19 11:33:21,516 views 14080 7208 Login attempt for username: hcl
+INFO 2025-07-19 11:33:22,003 views 14080 7208 Authentication successful for user: hcl
+INFO 2025-07-19 11:33:22,022 views 14080 7208 User hcl logged in successfully
+INFO 2025-07-19 11:33:22,024 views 14080 7208 User hcl not in 'nm' group, redirecting to home
+INFO 2025-07-19 11:33:22,030 basehttp 14080 7208 "POST / HTTP/1.1" 302 0
+INFO 2025-07-19 11:33:22,042 views 14080 7208 Home view accessed by user: hcl
+INFO 2025-07-19 11:33:22,043 views 14080 7208 Rendering home.html for user: hcl
+INFO 2025-07-19 11:33:22,054 basehttp 14080 7208 "GET /home/ HTTP/1.1" 200 4269
+INFO 2025-07-19 11:33:24,369 views 14080 7208 Logout requested for user: hcl
+INFO 2025-07-19 11:33:24,380 views 14080 7208 User hcl logged out successfully
+INFO 2025-07-19 11:33:24,381 basehttp 14080 7208 "GET /logout/ HTTP/1.1" 302 0
+INFO 2025-07-19 11:33:24,383 views 14080 7208 Login view accessed. User authenticated: False
+INFO 2025-07-19 11:33:24,385 basehttp 14080 7208 "GET /login/ HTTP/1.1" 200 5164
+INFO 2025-07-19 11:59:48,764 autoreload 14080 20180 C:\Users\Jegadeesh\Desktop\dashboard\lookerproject\lookerproject\urls.py changed, reloading.
+INFO 2025-07-19 11:59:49,322 autoreload 12496 21316 Watching for file changes with StatReloader
+INFO 2025-07-19 12:00:15,298 autoreload 12496 21316 C:\Users\Jegadeesh\Desktop\dashboard\lookerproject\lookerapp\views.py changed, reloading.
+INFO 2025-07-19 12:00:15,813 autoreload 14756 4960 Watching for file changes with StatReloader
+INFO 2025-07-19 12:00:44,883 autoreload 14756 4960 C:\Users\Jegadeesh\Desktop\dashboard\lookerproject\lookerproject\settings.py changed, reloading.
