@@ -37,18 +37,22 @@ def login_view(request):
         
         if user is not None:
             login(request, user)
+            
             if user.groups.filter(name='nm').exists():
                 return redirect('edutech')
+            elif request.user.is_superuser:
+                return redirect('/admin/')
             else:
                 return redirect('home')
         else:
             messages.error(request, 'Invalid Username or Password')
-    
-    return render(request, 'login.html')
+            return render(request, 'login.html')
+    else:
+        return render(request, 'login.html')
 
 def logout_view(request):
     logout(request)
-    return redirect('login')
+    return redirect('/')
 
 def contact(request):
     return render(request, 'error.html')
@@ -60,10 +64,6 @@ def home(request):
         selected_option = request.POST.get('bname')
         if selected_option == 'edu1':
             return render(request, 'edu.html')
-        # elif selected_option == 'ingage':
-        #     return render(request, 'error.html')
-        # elif selected_option == 'rewin':
-        #     return render(request, 'error.html')
     return render(request, 'home.html')
 
 @login_required
