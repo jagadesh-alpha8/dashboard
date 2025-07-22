@@ -23,6 +23,7 @@
           <li><a href="#" onclick="event.preventDefault(); document.getElementById('form-nm4').submit();">NM 4</a></li>
           <li><a href="#" onclick="event.preventDefault(); document.getElementById('form-nm5').submit();">NM 5</a></li>
           <li><a href="#" onclick="event.preventDefault(); document.getElementById('form-nm6').submit();">NM 6</a></li>
+          <li><a href="#" onclick="event.preventDefault(); document.getElementById('form-nm7').submit();">NM 7</a></li>
         </ul>
       </li>
       {% endif %}
@@ -35,6 +36,7 @@
     <form method="post" action="{% url 'edutech' %}" id="form-nm4" style="display:none;">{% csrf_token %}<input type="hidden" name="nm" value="NM4" /></form>
     <form method="post" action="{% url 'edutech' %}" id="form-nm5" style="display:none;">{% csrf_token %}<input type="hidden" name="nm" value="NM5" /></form>
     <form method="post" action="{% url 'edutech' %}" id="form-nm6" style="display:none;">{% csrf_token %}<input type="hidden" name="nm" value="NM6" /></form>
+    <form method="post" action="{% url 'edutech' %}" id="form-nm7" style="display:none;">{% csrf_token %}<input type="hidden" name="nm" value="NM7" /></form>
 
         <!-- Right Menu -->
         <ul class="nav navbar-nav navbar-right" style="font-weight: bold;">
