@@ -1,1 +1,29 @@
 myenv/
+db.sqlite3
+*.log
+
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Byte-compiled / cache
+*.pot
+*.pyc
+*.pyo
+*.pyd
+*.sqlite3
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# pytest / coverage
+.coverage
+htmlcov/
+.pytest_cache/
+
+# IDE / Editor
+.vscode/
+.idea/
