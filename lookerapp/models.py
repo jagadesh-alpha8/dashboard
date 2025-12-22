@@ -10,7 +10,8 @@ class CapturedPhoto(models.Model):
     timestamp = models.DateTimeField()
     latitude = models.FloatField()
     longitude = models.FloatField()
-    description = models.CharField(max_length=255)
+    place_name=models.CharField(max_length=500)
+    description = models.CharField(max_length=255, null=True, blank=True)
 
     def __str__(self):
         return self.description or "Captured Photo"
