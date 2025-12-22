@@ -1,0 +1,53 @@
+name: Dashboard CI/CD Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-test-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy dashboard repo to AWS EC2
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          script: |
+            cd /home/ubuntu
+
+            # Clone dashboard repo if not exists
+            if [ ! -d "dashboard/.git" ]; then
+              rm -rf dashboard
+              git clone git@github.com:jagadesh-alpha8/dashboard.git dashboard
+            fi
+
+            cd dashboard
+
+            # Always update to latest main
+            git fetch origin
+            git reset --hard origin/main
+
+            # Create venv if missing
+            if [ ! -d "venv" ]; then
+              python3 -m venv venv
+            fi
+
+            source venv/bin/activate
+            pip install --upgrade pip
+            pip install -r requirements.txt
+
+            # Django tasks
+            python manage.py migrate --noinput
+            python manage.py collectstatic --noinput
+
+            # Restart services
+            sudo systemctl daemon-reload
+            sudo systemctl restart gunicorn-dashboard
+            sudo systemctl restart nginx
