@@ -217,8 +217,8 @@ def csrf_failure(request, reason=""):
     # return render(request, 'error.html', {'reason': reason})
     return redirect('login')
 
-
-
+def test(request):
+    return render(request,"test.html")
 
 # import pandas as pd
 
