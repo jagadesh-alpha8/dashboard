@@ -146,7 +146,20 @@
                 }
             });
         }
-    
+
+    async function getPlaceName(latitude, longitude) {
+    const url = `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`;
+
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+        return data.display_name || "Unknown location";
+    } catch (error) {
+        console.error("Place lookup failed:", error);
+        return "Unknown location";
+    }
+}
+
         async function uploadPhoto() {
             if (!capturedImageDataUrl) {
                 console.error('No photo captured.');
@@ -156,6 +169,7 @@
             try {
                 const location = await getLocation();
                 const timestamp = new Date().toISOString();
+                const placeName = await getPlaceName(location.latitude, location.longitude);
                 const description = descriptionInput.value; // Get the description value
     
                 const response = await fetch("{% url 'trainer' %}", {
@@ -169,6 +183,7 @@
                         timestamp: timestamp,
                         latitude: location.latitude,
                         longitude: location.longitude,
+                        place_name: placeName, 
                         description: description // Send description with the request
                     })
                 });

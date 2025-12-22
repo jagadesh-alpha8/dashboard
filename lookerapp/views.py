@@ -67,7 +67,7 @@ def home(request):
     return render(request, 'home.html')
 
 @login_required
-@group_required(groups=['trainer','coordinator','nm'])
+@group_required(groups=['coordinator','nm'])
 def edu(request):
         if request.method == 'POST':
             selected_option = request.POST.get('type')
@@ -80,30 +80,30 @@ def edu(request):
 
 
 @login_required
-@group_required(groups=['trainer','coordinator','nm'])
+@group_required(groups=['coordinator','nm'])
 def edutech(request):
     if request.method == 'POST':
         selected_option = request.POST.get('nm')
         if selected_option == 'NM1':
-            src = "https://lookerstudio.google.com/embed/reporting/98b3b72e-82d8-400d-bb2e-319fff1f7415/page/FPr1D"
+            src = "https://lookerstudio.google.com/embed/reporting/7ca9ee3b-57ee-433f-a0f5-bad9570789af/page/FPr1D"
             return render(request, 'nmiframe.html', {'src': src})
         elif selected_option == 'NM2':
-            src = "https://lookerstudio.google.com/embed/reporting/4f2aea2b-b418-4c22-8488-14d491a3882c/page/gJr1D"
+            src = "https://lookerstudio.google.com/embed/reporting/06495847-6471-446d-87df-251f86984224/page/FPr1D"
             return render(request, 'nmiframe.html', {'src': src})
         elif selected_option == 'NM3':
-            src = "https://lookerstudio.google.com/embed/reporting/b9ee496c-dd50-4d91-baf4-0c5f6769c84a/page/p_zn918rlshd"
+            src = "https://lookerstudio.google.com/embed/reporting/b2918892-9a34-48ec-83b4-7b084bbbfc93/page/FPr1D"
             return render(request, 'nmiframe.html', {'src': src})
         elif selected_option == 'NM4':
-            src = "https://lookerstudio.google.com/embed/reporting/e89c7546-11e7-4e0a-9700-b49dc74494a0/page/bZt0D"
+            src = "https://lookerstudio.google.com/embed/reporting/06296e56-68a2-45a3-b603-22b13ef64853/page/FPr1D"
             return render(request, 'nmiframe.html', {'src': src})
         elif selected_option == 'NM5':
-            src = "https://lookerstudio.google.com/embed/reporting/6203b49a-b91c-4aba-b1b5-d79b62cf55cc/page/p_5wzb6wkshd"
+            src = "https://lookerstudio.google.com/embed/reporting/4a51655c-ad20-4422-8791-b6be75d424a7/page/FPr1D"
             return render(request, 'nmiframe.html', {'src': src})
         elif selected_option == 'NM6':
-            src = "https://lookerstudio.google.com/embed/reporting/b1370de1-7a23-44e1-b11a-0971fb45f7c8/page/p_5wzb6wkshd"
+            src = "https://lookerstudio.google.com/embed/reporting/a264b443-9de8-42ea-8172-5def68949882/page/FPr1D"
             return render(request, 'nmiframe.html', {'src': src})
         elif selected_option == 'NM7':
-            src = "https://lookerstudio.google.com/embed/reporting/e99e9e74-05a5-4e8b-8c8e-f72b42d941d5/page/p_xh15nmhqnd"
+            src = "https://lookerstudio.google.com/embed/reporting/67d94127-6c59-4a9f-b259-19d96936d5e1/page/p_atllecikyd"
             return render(request, 'nmiframe.html', {'src': src})
         
         
@@ -121,6 +121,8 @@ def trainer(request):
         latitude = data.get('latitude')
         longitude = data.get('longitude')
         description = data.get('description')
+        place_name = data.get('place_name')
+        print(place_name)
 
         # Decode the base64 image
         image_data = image_data.split(',')[1]
@@ -139,11 +141,12 @@ def trainer(request):
             timestamp=timestamp_dt,
             latitude=latitude,
             longitude=longitude,
-            description=description
+            description=description,
+            place_name=place_name
         )
         captured_photo.save()
 
-        return redirect('logout')
+        return redirect('home')
 
     return render(request, 'trainer_form.html')
 
@@ -186,6 +189,7 @@ def filter_photos(request):
         'photos': photos,
         'selected_user': selected_user,
         'selected_date': selected_date,
+        
     }
 
     if export:
@@ -199,11 +203,11 @@ def export_photos_to_csv(photos):
 
     # Write CSV headers
     writer = csv.writer(response)
-    writer.writerow(['Username', 'Timestamp', 'Description', 'Latitude', 'Longitude'])
+    writer.writerow(['Username', 'Timestamp', 'Description','place_name', 'Latitude', 'Longitude'])
 
     # Write CSV rows
     for photo in photos:
-        writer.writerow([photo.user.username, photo.timestamp, photo.description, photo.latitude, photo.longitude])
+        writer.writerow([photo.user.username, photo.timestamp, photo.description,photo.place_name, photo.latitude, photo.longitude])
 
     return response
 
