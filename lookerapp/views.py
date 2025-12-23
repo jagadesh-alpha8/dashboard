@@ -78,37 +78,42 @@ def edu(request):
             elif selected_option == 'value':
                 return render(request, "error.html")
 
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
 
 @login_required
 @group_required(groups=['coordinator','nm'])
 def edutech(request):
     if request.method == 'POST':
-        selected_option = request.POST.get('nm')
-        if selected_option == 'NM1':
-            src = "https://lookerstudio.google.com/embed/reporting/7ca9ee3b-57ee-433f-a0f5-bad9570789af/page/FPr1D"
-            return render(request, 'nmiframe.html', {'src': src})
-        elif selected_option == 'NM2':
-            src = "https://lookerstudio.google.com/embed/reporting/06495847-6471-446d-87df-251f86984224/page/FPr1D"
-            return render(request, 'nmiframe.html', {'src': src})
-        elif selected_option == 'NM3':
-            src = "https://lookerstudio.google.com/embed/reporting/b2918892-9a34-48ec-83b4-7b084bbbfc93/page/FPr1D"
-            return render(request, 'nmiframe.html', {'src': src})
-        elif selected_option == 'NM4':
-            src = "https://lookerstudio.google.com/embed/reporting/06296e56-68a2-45a3-b603-22b13ef64853/page/FPr1D"
-            return render(request, 'nmiframe.html', {'src': src})
-        elif selected_option == 'NM5':
-            src = "https://lookerstudio.google.com/embed/reporting/4a51655c-ad20-4422-8791-b6be75d424a7/page/FPr1D"
-            return render(request, 'nmiframe.html', {'src': src})
-        elif selected_option == 'NM6':
-            src = "https://lookerstudio.google.com/embed/reporting/a264b443-9de8-42ea-8172-5def68949882/page/FPr1D"
-            return render(request, 'nmiframe.html', {'src': src})
-        elif selected_option == 'NM7':
-            src = "https://lookerstudio.google.com/embed/reporting/67d94127-6c59-4a9f-b259-19d96936d5e1/page/p_atllecikyd"
-            return render(request, 'nmiframe.html', {'src': src})
-        
-        
-    return render(request, "edutech.html")
+        REPORTS = {
+            'NM1': '7ca9ee3b-57ee-433f-a0f5-bad9570789af',
+            'NM2': '06495847-6471-446d-87df-251f86984224',
+            'NM3': 'b2918892-9a34-48ec-83b4-7b084bbbfc93',
+            'NM4': '06296e56-68a2-45a3-b603-22b13ef64853',
+            'NM5': '4a51655c-ad20-4422-8791-b6be75d424a7',
+            'NM6': 'a264b443-9de8-42ea-8172-5def68949882',
+            'NM7': '67d94127-6c59-4a9f-b259-19d96936d5e1',
+        }
 
+        selected = request.POST.get('nm')
+        if selected in REPORTS:
+            src = f"https://lookerstudio.google.com/embed/reporting/{REPORTS[selected]}/page/FPr1D"
+            
+            # Render the template
+            response = render(request, 'nmiframe.html', {'src': src})
+            
+            # Add security headers to allow Looker Studio embedding
+            response['Content-Security-Policy'] = "frame-src 'self' https://lookerstudio.google.com https://*.google.com; script-src 'self' 'unsafe-inline' https://lookerstudio.google.com https://*.google.com;"
+            response['Referrer-Policy'] = 'no-referrer-when-downgrade'
+            
+            # Remove X-Frame-Options header if it exists (Django adds this by default)
+            if 'X-Frame-Options' in response:
+                del response['X-Frame-Options']
+            
+            return response
+
+    return render(request, "edutech.html")
 
 
 @login_required

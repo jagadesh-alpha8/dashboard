@@ -14,7 +14,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-q3q!7z2ot8s!j5-5onxl@p%d(-jq(!9cx23(li0iq360uwzay('
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 if DEBUG:
     ALLOWED_HOSTS = ['*']
@@ -47,6 +47,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'lookerapp.middleware.LogoutOnCloseMiddleware',
+    'lookerapp.middleware.SecurityHeadersMiddleware',
 ]
 
 ROOT_URLCONF = 'lookerproject.urls'
@@ -146,6 +147,7 @@ EMAIL_HOST_PASSWORD = 'gmdm xmam fvgj jtwf'  # Your email password (consider usi
 
 
 
+
 SESSION_COOKIE_AGE =   18000
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
@@ -175,6 +177,8 @@ if not DEBUG:
     SECURE_HSTS_SECONDS = 31536000
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
+    SECURE_REFERRER_POLICY = 'no-referrer-when-downgrade'
+    SECURE_CONTENT_TYPE_NOSNIFF = True
 else:
     # Local development - disable secure cookies
     SESSION_COOKIE_SECURE = False
