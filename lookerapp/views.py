@@ -249,3 +249,8 @@ def test(request):
 #         user.groups.add(group)
 #     else:
 #         print(f"User {username} already exists.")
+
+
+
+def div(request):
+    return render (request, "divya.html")

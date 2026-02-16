@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>For You 💕</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Dancing+Script:wght@600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --pink: #ff6b9d;
+      --rose: #e91e63;
+      --lavender: #c77dff;
+      --deep: #10021a;
+      --cream: #fff0f6;
+    }
+
+    html, body {
+      width: 100%; height: 100%;
+      overflow: hidden;
+      background: var(--deep);
+      font-family: 'Playfair Display', serif;
+      cursor: none;
+    }
+
+    /* CUSTOM CURSOR */
+    #cursor {
+      position: fixed;
+      width: 20px; height: 20px;
+      background: var(--pink);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      mix-blend-mode: screen;
+      transition: transform 0.1s;
+      filter: blur(1px);
+    }
+    #cursor.big { transform: translate(-50%,-50%) scale(3); }
+
+    /* STARFIELD */
+    #stars {
+      position: fixed; inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .star {
+      position: absolute;
+      border-radius: 50%;
+      background: white;
+      animation: twinkle var(--d) ease-in-out infinite alternate;
+    }
+    @keyframes twinkle {
+      0%   { opacity: 0.1; transform: scale(1); }
+      100% { opacity: 1;   transform: scale(1.6); }
+    }
+
+    /* AURORA BG */
+    .aurora {
+      position: fixed; inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+    .aurora::before {
+      content:'';
+      position: absolute;
+      width: 140%; height: 140%;
+      top: -20%; left: -20%;
+      background: radial-gradient(ellipse at 30% 40%, #ff6b9d33 0%, transparent 60%),
+                  radial-gradient(ellipse at 70% 20%, #c77dff22 0%, transparent 50%),
+                  radial-gradient(ellipse at 60% 80%, #e91e6322 0%, transparent 50%);
+      animation: auroraMove 8s ease-in-out infinite alternate;
+    }
+    @keyframes auroraMove {
+      0%   { transform: translate(0,0) rotate(0deg); }
+      100% { transform: translate(3%,4%) rotate(3deg); }
+    }
+
+    /* HEARTS RAIN */
+    #heartsCanvas {
+      position: fixed; inset: 0;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* SCENE */
+    #scene {
+      position: relative;
+      width: 100%; height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+    }
+
+    /* COUPLE SVG */
+    #couple-wrap {
+      position: relative;
+      width: min(500px, 90vw);
+      animation: float 4s ease-in-out infinite alternate;
+    }
+    @keyframes float {
+      from { transform: translateY(0px); }
+      to   { transform: translateY(-18px); }
+    }
+
+    #couple-wrap svg { width: 100%; height: auto; }
+
+    /* HEART BEAT around couple */
+    .pulse-ring {
+      position: absolute;
+      border-radius: 50%;
+      border: 2px solid var(--pink);
+      opacity: 0;
+      top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+      animation: pulse-ring 3s ease-out infinite;
+    }
+    .pulse-ring:nth-child(2) { animation-delay: 1s; }
+    .pulse-ring:nth-child(3) { animation-delay: 2s; }
+    @keyframes pulse-ring {
+      0%   { width: 60px; height: 60px; opacity: 0.8; }
+      100% { width: 300px; height: 300px; opacity: 0; }
+    }
+
+    /* TEXT */
+    #text-block {
+      text-align: center;
+      margin-top: 30px;
+      animation: fadeUp 1.5s ease both;
+      animation-delay: 0.5s;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .script-title {
+      font-family: 'Dancing Script', cursive;
+      font-size: clamp(2rem, 6vw, 4rem);
+      color: var(--pink);
+      text-shadow: 0 0 30px #ff6b9d88, 0 0 60px #ff6b9d44;
+      letter-spacing: 2px;
+      animation: glow 2.5s ease-in-out infinite alternate;
+    }
+    @keyframes glow {
+      from { text-shadow: 0 0 20px #ff6b9d88, 0 0 40px #ff6b9d44; }
+      to   { text-shadow: 0 0 40px #ff6b9dcc, 0 0 80px #ff6b9d66, 0 0 120px #ff6b9d33; }
+    }
+
+    .subtitle {
+      font-style: italic;
+      color: #ffb3d1;
+      font-size: clamp(0.9rem, 2.5vw, 1.3rem);
+      margin-top: 10px;
+      opacity: 0.85;
+      letter-spacing: 3px;
+    }
+
+    /* LOVE COUNTER */
+    #counter {
+      margin-top: 22px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .heart-icon {
+      font-size: 1.8rem;
+      animation: heartbeat 1.2s ease-in-out infinite;
+    }
+    @keyframes heartbeat {
+      0%,100% { transform: scale(1); }
+      14%      { transform: scale(1.3); }
+      28%      { transform: scale(1); }
+      42%      { transform: scale(1.15); }
+      70%      { transform: scale(1); }
+    }
+    .counter-num {
+      font-family: 'Dancing Script', cursive;
+      color: var(--cream);
+      font-size: clamp(1rem, 3vw, 1.5rem);
+      letter-spacing: 2px;
+    }
+
+    /* MESSAGE BOX */
+    #message-box {
+      margin-top: 28px;
+      max-width: min(480px, 88vw);
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,107,157,0.3);
+      border-radius: 20px;
+      padding: 20px 28px;
+      backdrop-filter: blur(8px);
+      animation: fadeUp 1.5s ease both;
+      animation-delay: 1s;
+    }
+    #message-box p {
+      color: #ffd6e8;
+      font-size: clamp(0.85rem, 2vw, 1.05rem);
+      line-height: 1.85;
+      text-align: center;
+      font-style: italic;
+    }
+
+    /* CLICK HEARTS */
+    .click-heart {
+      position: fixed;
+      pointer-events: none;
+      font-size: 1.5rem;
+      z-index: 100;
+      animation: flyUp 1s ease-out forwards;
+    }
+    @keyframes flyUp {
+      0%   { opacity: 1; transform: translateY(0) scale(1); }
+      100% { opacity: 0; transform: translateY(-80px) scale(0.5); }
+    }
+
+    /* FIREFLIES */
+    .firefly {
+      position: fixed;
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: #ffd6e8;
+      pointer-events: none;
+      z-index: 1;
+      animation: fireflyMove var(--dur) ease-in-out infinite alternate, fireflyFade var(--dur) ease-in-out infinite alternate;
+      filter: blur(1px);
+      box-shadow: 0 0 6px 2px #ff6b9d;
+    }
+    @keyframes fireflyMove {
+      0%   { transform: translate(0,0); }
+      100% { transform: translate(var(--tx), var(--ty)); }
+    }
+    @keyframes fireflyFade {
+      0%,100% { opacity: 0.1; }
+      50%      { opacity: 0.9; }
+    }
+
+    /* BOTTOM LANDSCAPE */
+    #landscape {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      z-index: 1;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+
+<div id="cursor"></div>
+<div class="aurora"></div>
+<div id="stars"></div>
+<canvas id="heartsCanvas"></canvas>
+
+<!-- FIREFLIES -->
+<script>
+  for (let i = 0; i < 18; i++) {
+    const f = document.createElement('div');
+    f.className = 'firefly';
+    f.style.cssText = `
+      left:${Math.random()*100}vw;
+      top:${Math.random()*100}vh;
+      --dur:${4+Math.random()*6}s;
+      --tx:${(Math.random()-0.5)*120}px;
+      --ty:${(Math.random()-0.5)*80}px;
+    `;
+    document.body.appendChild(f);
+  }
+</script>
+
+<div id="scene">
+  <!-- PULSE RINGS -->
+  <div style="position:relative; display:flex; align-items:center; justify-content:center;">
+    <div class="pulse-ring"></div>
+    <div class="pulse-ring"></div>
+    <div class="pulse-ring"></div>
+
+    <!-- COUPLE SVG -->
+    <div id="couple-wrap">
+      <svg viewBox="0 0 340 300" xmlns="http://www.w3.org/2000/svg">
+        <!-- GLOW CIRCLE -->
+        <defs>
+          <radialGradient id="glow1" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#ff6b9d" stop-opacity="0.2"/>
+            <stop offset="100%" stop-color="#ff6b9d" stop-opacity="0"/>
+          </radialGradient>
+          <radialGradient id="skyGrad" cx="50%" cy="0%" r="100%">
+            <stop offset="0%" stop-color="#1a0030"/>
+            <stop offset="100%" stop-color="#0a0015"/>
+          </radialGradient>
+          <linearGradient id="skinG" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#FECBA6"/>
+            <stop offset="100%" stop-color="#e8a88a"/>
+          </linearGradient>
+          <linearGradient id="dressG" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#ff6b9d"/>
+            <stop offset="100%" stop-color="#982245"/>
+          </linearGradient>
+          <linearGradient id="shirtG" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#7b2fff"/>
+            <stop offset="100%" stop-color="#3b0099"/>
+          </linearGradient>
+          <filter id="softGlow">
+            <feGaussianBlur stdDeviation="3" result="blur"/>
+            <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+          </filter>
+        </defs>
+
+        <!-- GROUND -->
+        <ellipse cx="170" cy="275" rx="140" ry="18" fill="#1a0030" opacity="0.5"/>
+
+        <!-- MOON -->
+        <circle cx="280" cy="45" r="32" fill="#fff9e6" opacity="0.9"/>
+        <circle cx="292" cy="38" r="26" fill="#1a0030" opacity="0.95"/>
+        <!-- moon glow -->
+        <circle cx="280" cy="45" r="42" fill="url(#glow1)" opacity="0.5"/>
+
+        <!-- STARS (small) -->
+        <circle cx="40" cy="30" r="1.5" fill="white" opacity="0.8"/>
+        <circle cx="80" cy="15" r="1" fill="white" opacity="0.6"/>
+        <circle cx="130" cy="25" r="1.5" fill="white" opacity="0.7"/>
+        <circle cx="200" cy="18" r="1" fill="white" opacity="0.9"/>
+        <circle cx="60" cy="60" r="1" fill="white" opacity="0.5"/>
+        <circle cx="25" cy="80" r="1.5" fill="white" opacity="0.7"/>
+        <circle cx="310" cy="80" r="1" fill="white" opacity="0.6"/>
+
+        <!-- BENCH -->
+        <rect x="75" y="218" width="190" height="10" rx="5" fill="#3b1a5a"/>
+        <rect x="90" y="228" width="10" height="40" rx="3" fill="#2a1040"/>
+        <rect x="240" y="228" width="10" height="40" rx="3" fill="#2a1040"/>
+        <!-- bench back -->
+        <rect x="75" y="190" width="190" height="30" rx="5" fill="#4a2070" opacity="0.7"/>
+        <!-- bench slats -->
+        <rect x="75" y="192" width="190" height="4" rx="2" fill="#5a3080" opacity="0.5"/>
+        <rect x="75" y="200" width="190" height="4" rx="2" fill="#5a3080" opacity="0.5"/>
+        <rect x="75" y="208" width="190" height="4" rx="2" fill="#5a3080" opacity="0.5"/>
+
+        <!-- == GIRL == -->
+        <!-- dress / body -->
+        <path d="M130 175 Q115 200 110 260 L165 260 Q155 220 155 175 Z" fill="url(#dressG)"/>
+        <!-- dress flare -->
+        <path d="M110 240 Q95 260 105 265 Q130 250 165 250 Q175 265 165 260 L110 260 Z" fill="#982245"/>
+        <!-- girl torso -->
+        <rect x="130" y="140" width="30" height="38" rx="8" fill="url(#dressG)"/>
+        <!-- girl neck -->
+        <rect x="140" y="115" width="12" height="28" rx="6" fill="url(#skinG)"/>
+        <!-- girl head -->
+        <ellipse cx="146" cy="102" rx="22" ry="24" fill="url(#skinG)"/>
+        <!-- hair -->
+        <ellipse cx="146" cy="88" rx="23" ry="14" fill="#2F1829"/>
+        <path d="M125 95 Q118 130 122 150" stroke="#2F1829" stroke-width="14" stroke-linecap="round" fill="none"/>
+        <path d="M167 95 Q170 120 167 140" stroke="#2F1829" stroke-width="8" stroke-linecap="round" fill="none"/>
+        <!-- hair highlight -->
+        <path d="M128 87 Q140 80 155 87" stroke="#5c2a3a" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.5"/>
+        <!-- girl eye left -->
+        <ellipse cx="139" cy="103" rx="3.5" ry="4" fill="#2F1829"/>
+        <circle cx="140.5" cy="101.5" r="1" fill="white" opacity="0.8"/>
+        <!-- girl eye right -->
+        <ellipse cx="153" cy="103" rx="3.5" ry="4" fill="#2F1829"/>
+        <circle cx="154.5" cy="101.5" r="1" fill="white" opacity="0.8"/>
+        <!-- blush -->
+        <ellipse cx="135" cy="110" rx="5" ry="3" fill="#ff8fae" opacity="0.5"/>
+        <ellipse cx="157" cy="110" rx="5" ry="3" fill="#ff8fae" opacity="0.5"/>
+        <!-- smile -->
+        <path d="M141 114 Q146 119 151 114" stroke="#cc4466" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        <!-- girl arm right (toward boy) -->
+        <path d="M157 155 Q180 170 192 175" stroke="url(#skinG)" stroke-width="11" stroke-linecap="round" fill="none"/>
+        <!-- girl arm left -->
+        <path d="M133 155 Q120 165 118 175" stroke="url(#skinG)" stroke-width="9" stroke-linecap="round" fill="none"/>
+
+        <!-- == BOY == -->
+        <!-- pants -->
+        <path d="M175 175 Q170 210 168 260 L192 260 Q196 210 195 175 Z" fill="#1a0040"/>
+        <path d="M195 175 Q200 210 202 260 L220 260 Q218 210 215 175 Z" fill="#1a0040"/>
+        <!-- shirt/body -->
+        <rect x="173" y="135" width="45" height="45" rx="8" fill="url(#shirtG)"/>
+        <!-- boy neck -->
+        <rect x="189" y="110" width="13" height="28" rx="6" fill="url(#skinG)"/>
+        <!-- boy head -->
+        <ellipse cx="196" cy="98" rx="24" ry="25" fill="url(#skinG)"/>
+        <!-- boy hair -->
+        <ellipse cx="196" cy="82" rx="24" ry="13" fill="#2F1829"/>
+        <path d="M173 90 Q171 85 178 80" stroke="#2F1829" stroke-width="7" stroke-linecap="round" fill="none"/>
+        <!-- hair highlight -->
+        <path d="M178 80 Q192 76 206 80" stroke="#4a2a5a" stroke-width="3" fill="none" opacity="0.5"/>
+        <!-- boy eye left -->
+        <ellipse cx="188" cy="99" rx="3.5" ry="4" fill="#2F1829"/>
+        <circle cx="189.5" cy="97.5" r="1" fill="white" opacity="0.8"/>
+        <!-- boy eye right -->
+        <ellipse cx="204" cy="99" rx="3.5" ry="4" fill="#2F1829"/>
+        <circle cx="205.5" cy="97.5" r="1" fill="white" opacity="0.8"/>
+        <!-- blush boy -->
+        <ellipse cx="183" cy="106" rx="5" ry="3" fill="#ff8fae" opacity="0.35"/>
+        <ellipse cx="209" cy="106" rx="5" ry="3" fill="#ff8fae" opacity="0.35"/>
+        <!-- smile boy -->
+        <path d="M191 111 Q196 116 201 111" stroke="#cc4466" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        <!-- boy arm left (toward girl, holding) -->
+        <path d="M175 150 Q162 165 155 172" stroke="url(#skinG)" stroke-width="11" stroke-linecap="round" fill="none"/>
+        <!-- boy arm right -->
+        <path d="M215 150 Q225 160 228 170" stroke="url(#skinG)" stroke-width="9" stroke-linecap="round" fill="none"/>
+
+        <!-- HELD HANDS (center) -->
+        <circle cx="170" cy="175" r="9" fill="url(#skinG)"/>
+        <circle cx="178" cy="175" r="9" fill="url(#skinG)"/>
+        <!-- finger lines subtle -->
+        <path d="M163 172 Q170 170 177 172" stroke="#e8a88a" stroke-width="1" fill="none" opacity="0.5"/>
+
+        <!-- FLOATING HEART -->
+        <g id="floatHeart" style="animation: floatUp 2.5s ease-in-out infinite alternate;">
+          <path d="M170 80 C170 80 155 66 155 57 C155 48 165 45 170 52 C175 45 185 48 185 57 C185 66 170 80 170 80 Z" fill="#ff6b9d" opacity="0.95" filter="url(#softGlow)"/>
+        </g>
+        <style>
+          #floatHeart { animation: floatUp 2.5s ease-in-out infinite alternate; }
+          @keyframes floatUp {
+            from { transform: translateY(0) scale(1); opacity: 1; }
+            to   { transform: translateY(-12px) scale(1.1); opacity: 0.8; }
+          }
+        </style>
+
+        <!-- small hearts -->
+        <path d="M200 58 C200 58 193.5 51.5 193.5 47 C193.5 42.5 198 41 200 44.5 C202 41 206.5 42.5 206.5 47 C206.5 51.5 200 58 200 58 Z" fill="#ff6b9d" opacity="0.6"/>
+        <path d="M145 68 C145 68 138.5 61.5 138.5 57 C138.5 52.5 143 51 145 54.5 C147 51 151.5 52.5 151.5 57 C151.5 61.5 145 68 145 68 Z" fill="#c77dff" opacity="0.5"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- TEXT -->
+  <div id="text-block">
+    <div class="script-title">You Are My Everything Divya</div>
+    <div class="subtitle">✦ every moment with you is magic ✦</div>
+    <div id="counter">
+      <span class="heart-icon">💕</span>
+      <span class="counter-num" id="heartCount">Sending you love...</span>
+      <span class="heart-icon">💕</span>
+    </div>
+  </div>
+
+  <!-- MESSAGE -->
+  <div id="message-box">
+    <p id="messageText">"In a sky full of stars, I chose you — and I'd choose you in a thousand lifetimes."</p>
+  </div>
+</div>
+
+<!-- LANDSCAPE SILHOUETTE -->
+<svg id="landscape" viewBox="0 0 1440 120" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+  <path d="M0 120 L0 60 Q100 30 200 50 Q300 70 400 40 Q500 10 600 35 Q700 60 800 30 Q900 5 1000 30 Q1100 55 1200 35 Q1300 15 1440 40 L1440 120 Z" fill="#10021a"/>
+  <path d="M0 120 L0 80 Q150 60 300 70 Q450 80 600 60 Q750 40 900 60 Q1050 80 1200 65 Q1320 55 1440 70 L1440 120 Z" fill="#1a0030" opacity="0.8"/>
+</svg>
+
+<!-- STARS -->
+<script>
+  const starsEl = document.getElementById('stars');
+  for (let i = 0; i < 120; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    const size = Math.random() * 2.5 + 0.5;
+    s.style.cssText = `
+      width:${size}px; height:${size}px;
+      left:${Math.random()*100}%;
+      top:${Math.random()*100}%;
+      --d:${1.5+Math.random()*3}s;
+      animation-delay:${Math.random()*3}s;
+    `;
+    starsEl.appendChild(s);
+  }
+</script>
+
+<!-- HEART RAIN CANVAS -->
+<script>
+  const canvas = document.getElementById('heartsCanvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  window.addEventListener('resize', () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  });
+
+  function drawHeart(ctx, x, y, size, color, alpha) {
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.translate(x, y);
+    ctx.moveTo(0, -size * 0.3);
+    ctx.bezierCurveTo(size * 0.5, -size * 1, size * 1.2, size * 0.2, 0, size * 1);
+    ctx.bezierCurveTo(-size * 1.2, size * 0.2, -size * 0.5, -size * 1, 0, -size * 0.3);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  const hearts = [];
+  const colors = ['#ff6b9d','#c77dff','#ff8fab','#ffd6e8','#e91e63'];
+  for (let i = 0; i < 15; i++) {
+    hearts.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height + canvas.height,
+      size: Math.random() * 10 + 5,
+      speed: Math.random() * 0.8 + 0.3,
+      drift: (Math.random() - 0.5) * 0.5,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      alpha: Math.random() * 0.4 + 0.2,
+      angle: 0,
+      angleSpeed: (Math.random() - 0.5) * 0.02
+    });
+  }
+
+  function animHearts() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    hearts.forEach(h => {
+      h.y -= h.speed;
+      h.x += h.drift;
+      h.angle += h.angleSpeed;
+      if (h.y < -30) {
+        h.y = canvas.height + 30;
+        h.x = Math.random() * canvas.width;
+      }
+      ctx.save();
+      ctx.translate(h.x, h.y);
+      ctx.rotate(h.angle);
+      drawHeart(ctx, 0, 0, h.size, h.color, h.alpha);
+      ctx.restore();
+    });
+    requestAnimationFrame(animHearts);
+  }
+  animHearts();
+</script>
+
+<!-- CURSOR -->
+<script>
+  const cursor = document.getElementById('cursor');
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+  });
+  document.addEventListener('mousedown', () => cursor.classList.add('big'));
+  document.addEventListener('mouseup', () => cursor.classList.remove('big'));
+</script>
+
+<!-- CLICK HEARTS -->
+<script>
+  const clickEmojis = ['💕','💖','💗','💝','✨','🌸','💫'];
+  document.addEventListener('click', e => {
+    const h = document.createElement('div');
+    h.className = 'click-heart';
+    h.textContent = clickEmojis[Math.floor(Math.random()*clickEmojis.length)];
+    h.style.left = e.clientX + 'px';
+    h.style.top = e.clientY + 'px';
+    document.body.appendChild(h);
+    setTimeout(() => h.remove(), 1000);
+  });
+</script>
+
+<!-- HEART COUNTER + ROTATING MESSAGES -->
+<script>
+  let count = 0;
+  const messages = [
+    '"In a sky full of stars, I chose you — and I\'d choose you in a thousand lifetimes."',
+    '"Every love song makes sense now, because of you."',
+    '"You make ordinary moments feel like poetry."',
+    '"My heart found its home the day it found you."',
+    '"With you, even silence feels warm."',
+    '"You are the dream I never want to wake up from."'
+  ];
+  let msgIdx = 0;
+  const msgEl = document.getElementById('messageText');
+  const countEl = document.getElementById('heartCount');
+
+  setInterval(() => {
+    count++;
+    countEl.textContent = `${count} hearts sent to you 💖`;
+  }, 1200);
+
+  setInterval(() => {
+    msgIdx = (msgIdx + 1) % messages.length;
+    msgEl.style.opacity = '0';
+    msgEl.style.transition = 'opacity 0.6s';
+    setTimeout(() => {
+      msgEl.textContent = messages[msgIdx];
+      msgEl.style.opacity = '1';
+    }, 600);
+  }, 5000);
+</script>
+
+</body>
+</html>
