@@ -1,0 +1,154 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ camera.name }} - Live View</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/cctv.css' %}">
+</head>
+
+<body>
+
+    <div class="app-layout">
+        
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-text">
+                    <i class="fa-solid fa-video"></i> Ingage CCTV
+                </div>
+                <div class="system-status">
+                    <span class="status-dot-pulse"></span>
+                    Live Monitor Active
+                </div>
+            </div>
+
+            <ul class="sidebar-menu">
+                <li class="menu-item active">
+                    <a href="{% url 'cctv_dashboard' %}">
+                        <i class="fa-solid fa-chart-line"></i> Dashboard
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="{% url 'add_branch' %}">
+                        <i class="fa-solid fa-folder-plus"></i> Add Branch
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="{% url 'add_camera' %}">
+                        <i class="fa-solid fa-camera"></i> Add Camera
+                    </a>
+                </li>
+                <li class="sidebar-divider"></li>
+                <li class="menu-item">
+                    <a href="{% url 'home' %}">
+                        <i class="fa-solid fa-house"></i> App Home
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="{% url 'logout' %}">
+                        <i class="fa-solid fa-right-from-bracket"></i> Logout
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            
+            <!-- Breadcrumbs -->
+            <nav class="breadcrumbs">
+                <a href="{% url 'cctv_dashboard' %}" class="breadcrumb-item">CCTV</a>
+                <span class="breadcrumb-separator">/</span>
+                <a href="{% url 'cctv_dashboard' %}" class="breadcrumb-item">Dashboard</a>
+                <span class="breadcrumb-separator">/</span>
+                <a href="{% url 'cctv_dashboard' %}?branch={{ camera.branch.id }}" class="breadcrumb-item">{{ camera.branch.name }}</a>
+                <span class="breadcrumb-separator">/</span>
+                <span class="breadcrumb-item active">{{ camera.name }}</span>
+            </nav>
+
+            <div class="back-btn-container">
+                <a href="{% url 'cctv_dashboard' %}?branch={{ camera.branch.id }}" class="btn-back">
+                    <i class="fa-solid fa-arrow-left"></i> Back to Branch Grid
+                </a>
+            </div>
+
+            <!-- Page Title Row -->
+            <div class="page-header-row">
+                <div class="page-title-group">
+                    <div style="display:flex; align-items:center; gap: 10px;">
+                        <h1 class="page-title">{{ camera.name }}</h1>
+                        <span class="status-dot-pulse" style="width:10px; height:10px; display:inline-block; vertical-align:middle; background-color:{% if camera.active %}var(--success){% else %}var(--text-muted){% endif %}; font-size:inherit;"></span>
+                    </div>
+                    <p class="page-subtitle">Location: {{ camera.branch.name }} | Connection Feed: Active Stream</p>
+                </div>
+            </div>
+
+            <!-- Live Stream Monitoring Window -->
+            <div class="live-stream-panel">
+                <iframe
+                    src="http://SERVER_IP:8889/{{ camera.mediamtx_path }}"
+                    width="100%"
+                    height="650"
+                    style="border: none; background: #050608; display: block;"
+                    allowfullscreen>
+                </iframe>
+                
+                <!-- Custom status controls overlay -->
+                <div class="live-stream-controls-overlay">
+                    <div class="live-stream-info-tag">
+                        <span class="live-badge"><span class="rec-dot"></span>LIVE</span>
+                        <span class="stream-path-detail">rtsp://camera-source/{{ camera.mediamtx_path }}</span>
+                    </div>
+                    
+                    <div style="display:flex; gap:15px; align-items:center; font-size:11px; color:var(--text-secondary);">
+                        <span><i class="fa-solid fa-circle-nodes" style="color:var(--primary);"></i> 1080p</span>
+                        <span><i class="fa-solid fa-gauge-high" style="color:var(--success);"></i> 30 FPS</span>
+                        <span class="stream-timestamp" id="stream-detail-ticker">--:--:--</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Camera Technical Details Card -->
+            <div class="stat-card" style="margin-top:25px; padding:24px; display:block;">
+                <h3 style="font-size:16px; margin-bottom:15px; font-family:'Outfit', sans-serif;"><i class="fa-solid fa-circle-info" style="color:var(--primary);"></i> Technical Specifications</h3>
+                
+                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:20px; font-size:13px; color:var(--text-secondary);">
+                    <div>
+                        <strong style="color:var(--text-main);">RTSP Input Link:</strong>
+                        <div style="font-family:monospace; margin-top:5px; background:rgba(0,0,0,0.2); padding:8px; border-radius:6px; word-break:break-all; border:1px solid var(--border-color);">
+                            {{ camera.rtsp_url }}
+                        </div>
+                    </div>
+                    <div>
+                        <strong style="color:var(--text-main);">Branch Location Association:</strong>
+                        <p style="margin-top:5px;">{{ camera.branch.name }} (ID: {{ camera.branch.id }})</p>
+                    </div>
+                    <div>
+                        <strong style="color:var(--text-main);">MediaMTX Path Name:</strong>
+                        <p style="margin-top:5px; font-family:monospace;">{{ camera.mediamtx_path }}</p>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Javascript Live Ticker -->
+    <script>
+        function updateTicker() {
+            const ticker = document.getElementById('stream-detail-ticker');
+            if (ticker) {
+                const now = new Date();
+                ticker.innerText = now.toLocaleDateString() + ' ' + now.toTimeString().split(' ')[0];
+            }
+        }
+        setInterval(updateTicker, 1000);
+        updateTicker();
+    </script>
+</body>
+
+</html>

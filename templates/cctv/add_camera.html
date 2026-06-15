@@ -1,0 +1,136 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if edit %}Edit Camera{% else %}Add Camera{% endif %} - Ingage CCTV</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/cctv.css' %}">
+</head>
+
+<body>
+
+    <div class="app-layout">
+        
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-text">
+                    <i class="fa-solid fa-video"></i> Ingage CCTV
+                </div>
+                <div class="system-status">
+                    <span class="status-dot-pulse"></span>
+                    Live Monitor Active
+                </div>
+            </div>
+
+            <ul class="sidebar-menu">
+                <li class="menu-item">
+                    <a href="{% url 'cctv_dashboard' %}">
+                        <i class="fa-solid fa-chart-line"></i> Dashboard
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="{% url 'add_branch' %}">
+                        <i class="fa-solid fa-folder-plus"></i> Add Branch
+                    </a>
+                </li>
+                <li class="menu-item active">
+                    <a href="{% url 'add_camera' %}">
+                        <i class="fa-solid fa-camera"></i> Add Camera
+                    </a>
+                </li>
+                <li class="sidebar-divider"></li>
+                <li class="menu-item">
+                    <a href="{% url 'home' %}">
+                        <i class="fa-solid fa-house"></i> App Home
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="{% url 'logout' %}">
+                        <i class="fa-solid fa-right-from-bracket"></i> Logout
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            
+            <!-- Breadcrumbs -->
+            <nav class="breadcrumbs">
+                <a href="{% url 'cctv_dashboard' %}" class="breadcrumb-item">CCTV</a>
+                <span class="breadcrumb-separator">/</span>
+                <a href="{% url 'cctv_dashboard' %}" class="breadcrumb-item">Dashboard</a>
+                <span class="breadcrumb-separator">/</span>
+                <span class="breadcrumb-item active">{% if edit %}Edit Camera{% else %}Add Camera{% endif %}</span>
+            </nav>
+
+            <div class="back-btn-container">
+                <a href="{% url 'cctv_dashboard' %}" class="btn-back">
+                    <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+                </a>
+            </div>
+
+            <!-- Page Title Row -->
+            <div class="page-header-row">
+                <div class="page-title-group">
+                    <h1 class="page-title">{% if edit %}Edit Camera Configuration{% else %}Add New Camera{% endif %}</h1>
+                    <p class="page-subtitle">
+                        {% if edit %}Modify settings and details for camera: {{ camera.name }}.{% else %}Register a new RTSP camera feed under a branch location.{% endif %}
+                    </p>
+                </div>
+            </div>
+
+            <div class="form-card">
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="form-group-custom">
+                        <label for="id_branch">Select Branch Location</label>
+                        <!-- Custom styled Select Box -->
+                        <select name="branch" id="id_branch" class="form-select-custom" required>
+                            {% for choice in form.fields.branch.choices %}
+                                <option value="{{ choice.0 }}" {% if choice.0 == form.initial.branch or choice.0 == form.instance.branch.id %}selected{% endif %}>
+                                    {{ choice.1 }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group-custom">
+                        <label for="id_name">Camera Name</label>
+                        <input type="text" name="name" id="id_name" class="form-input-custom" 
+                               value="{% if form.instance.name %}{{ form.instance.name }}{% endif %}" 
+                               placeholder="e.g. Reception Desk, Parking North" maxlength="100" required>
+                    </div>
+
+                    <div class="form-group-custom">
+                        <label for="id_rtsp_url">RTSP Feed URL</label>
+                        <textarea name="rtsp_url" id="id_rtsp_url" class="form-textarea-custom" rows="3" 
+                                  placeholder="rtsp://username:password@ip_address:port/path" required>{% if form.instance.rtsp_url %}{{ form.instance.rtsp_url }}{% endif %}</textarea>
+                        <p class="form-help-text">RTSP connection string directly from your camera's live stream server config.</p>
+                    </div>
+
+                    <div class="form-group-custom" style="display:flex; align-items:center; gap: 10px;">
+                        <input type="checkbox" name="active" id="id_active" {% if form.instance.active or not edit %}checked{% endif %} style="width:auto;">
+                        <label for="id_active" style="margin-bottom:0; cursor:pointer;">Activated</label>
+                    </div>
+
+                    <div class="form-actions-row">
+                        <a href="{% url 'cctv_dashboard' %}" class="btn btn-secondary">Cancel</a>
+                        <button type="submit" class="btn btn-primary">
+                            {% if edit %}Update Camera{% else %}Save Camera{% endif %}
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+        </main>
+    </div>
+
+</body>
+
+</html>

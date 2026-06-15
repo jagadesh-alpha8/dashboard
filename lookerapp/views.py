@@ -94,6 +94,7 @@ def edutech(request):
             'NM5': '4a51655c-ad20-4422-8791-b6be75d424a7',
             'NM6': 'a264b443-9de8-42ea-8172-5def68949882',
             'NM7': '67d94127-6c59-4a9f-b259-19d96936d5e1',
+            'NM8': '23cd3fc2-6d0a-4344-9cae-eb1afeec8c28',
         }
 
         selected = request.POST.get('nm')
@@ -250,7 +251,3 @@ def test(request):
 #     else:
 #         print(f"User {username} already exists.")
 
-
-
-def div(request):
-    return render (request, "divya.html")

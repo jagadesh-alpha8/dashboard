@@ -1,0 +1,854 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CCTV Dashboard - Ingage</title>
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/cctv.css' %}">
+</head>
+
+<body>
+
+    <div class="app-layout">
+        
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-text">
+                    <i class="fa-solid fa-video"></i> Ingage CCTV
+                </div>
+                <div class="system-status">
+                    <span class="status-dot-pulse"></span>
+                    Live Monitor Active
+                </div>
+            </div>
+
+            <ul class="sidebar-menu">
+                <li class="menu-item active">
+                    <a href="{% url 'cctv_dashboard' %}">
+                        <i class="fa-solid fa-chart-line"></i> Dashboard
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="#" id="sidebar-add-branch-btn">
+                        <i class="fa-solid fa-folder-plus"></i> Add Branch
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="#" id="sidebar-add-camera-btn">
+                        <i class="fa-solid fa-camera"></i> Add Camera
+                    </a>
+                </li>
+                <li class="sidebar-divider"></li>
+                <li class="menu-item">
+                    <a href="{% url 'home' %}">
+                        <i class="fa-solid fa-house"></i> App Home
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="{% url 'logout' %}">
+                        <i class="fa-solid fa-right-from-bracket"></i> Logout
+                    </a>
+                </li>
+            </ul>
+
+            <div class="sidebar-divider"></div>
+
+            <div class="sidebar-section-title">Branches</div>
+            <ul class="branch-list-sidebar" id="branch-sidebar-list">
+                <a class="branch-link-item active" data-branch-id="all">
+                    <span>All Branches</span>
+                    <span class="branch-camera-count" id="all-camera-count">{{ cameras|length }}</span>
+                </a>
+                {% for branch in branches %}
+                <a class="branch-link-item" data-branch-id="{{ branch.id }}">
+                    <span>{{ branch.name }}</span>
+                    <span class="branch-camera-count" data-branch-count-id="{{ branch.id }}">
+                        {{ branch.cameras.all|length }}
+                    </span>
+                </a>
+                {% endfor %}
+            </ul>
+        </aside>
+
+        <!-- Main Dashboard Content -->
+        <main class="main-content">
+            
+            <!-- Breadcrumbs -->
+            <nav class="breadcrumbs">
+                <a href="{% url 'cctv_dashboard' %}" class="breadcrumb-item">CCTV</a>
+                <span class="breadcrumb-separator">/</span>
+                <span class="breadcrumb-item active" id="breadcrumb-current">Dashboard</span>
+            </nav>
+
+            <!-- Page Title Row -->
+            <div class="page-header-row">
+                <div class="page-title-group">
+                    <h1 class="page-title" id="page-title-heading">CCTV Dashboard</h1>
+                    <p class="page-subtitle">Interactive daily live monitoring and branch configuration system.</p>
+                </div>
+
+                <div class="header-actions-group">
+                    <div class="search-wrapper">
+                        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                        <input type="text" id="camera-search-input" class="search-input" placeholder="Search cameras...">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Overview -->
+            <section class="stats-row">
+                <div class="stat-card">
+                    <span class="stat-label">Total Branches</span>
+                    <span class="stat-value" id="stats-total-branches">{{ branches|length }}</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Registered Cameras</span>
+                    <span class="stat-value" id="stats-total-cameras">{{ cameras|length }}</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Online Feeds</span>
+                    <span class="stat-value" id="stats-online-cameras">0</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">System State</span>
+                    <span class="stat-value" style="color: var(--success); font-size: 18px;">OPERATIONAL</span>
+                </div>
+            </section>
+
+            <!-- Camera Grid Section -->
+            <div class="camera-grid-section-header">
+                <h2 class="grid-section-title" id="grid-title">All Cameras</h2>
+                <div class="actions">
+                    <button class="btn btn-primary" id="quick-add-camera-btn">
+                        <i class="fa-solid fa-plus"></i> New Camera
+                    </button>
+                </div>
+            </div>
+
+            <div class="camera-grid" id="camera-grid">
+                {% for camera in cameras %}
+                <div class="camera-card active-state" data-camera-id="{{ camera.id }}" data-branch-id="{{ camera.branch.id }}" data-camera-name="{{ camera.name|lower }}">
+                    
+                    <!-- Card Header -->
+                    <div class="card-header-bar">
+                        <div class="camera-title-group">
+                            <span class="camera-header-status-dot"></span>
+                            <span class="camera-title">{{ camera.name }}</span>
+                        </div>
+                        <div class="card-actions-dropdown">
+                            <button class="card-action-icon-btn edit-trigger" data-camera-id="{{ camera.id }}">
+                                <i class="fa-solid fa-pen"></i>
+                            </button>
+                            <button class="card-action-icon-btn delete-trigger" data-camera-id="{{ camera.id }}">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Simulated Preview Canvas -->
+                    <div class="stream-preview-wrapper">
+                        <div class="simulated-stream-bg">
+                            <div class="stream-overlay-top">
+                                <span class="rec-badge"><span class="rec-dot"></span>REC</span>
+                                <span class="stream-meta-tag">RTSP</span>
+                            </div>
+                            
+                            <div class="stream-middle-center">
+                                <a href="{% url 'camera_detail' camera.id %}" class="stream-play-icon" title="Open Stream">
+                                    <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                                </a>
+                            </div>
+
+                            <div class="stream-overlay-bottom">
+                                <span class="stream-timestamp ticker-timestamp">--:--:--</span>
+                                <span class="stream-fps">30 FPS</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Footer / Active Toggle -->
+                    <div class="card-footer-controls">
+                        <div class="camera-branch-badge">
+                            <i class="fa-solid fa-folder"></i> {{ camera.branch.name }}
+                        </div>
+                        <label class="switch-control">
+                            <input type="checkbox" class="active-status-toggle" data-camera-id="{{ camera.id }}" {% if camera.active %}checked{% endif %}>
+                            <span class="slider-switch"></span>
+                        </label>
+                    </div>
+
+                </div>
+                {% empty %}
+                <div class="empty-state-card" id="empty-state">
+                    <i class="fa-solid fa-video-slash empty-state-icon"></i>
+                    <h3>No Cameras Configured</h3>
+                    <p>Click "New Camera" to add a camera feed under a branch.</p>
+                </div>
+                {% endfor %}
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Modal: Add Branch -->
+    <div class="modal-overlay-custom" id="add-branch-modal">
+        <div class="modal-card-custom">
+            <div class="modal-header-custom">
+                <h3 class="modal-title-custom">Add New Branch</h3>
+                <button class="modal-close-btn" data-close-modal="add-branch-modal">&times;</button>
+            </div>
+            <div class="modal-body-custom">
+                <form id="add-branch-form" method="post" action="{% url 'add_branch' %}">
+                    {% csrf_token %}
+                    <div class="form-group-custom">
+                        <label for="branch-name-input">Branch Name</label>
+                        <input type="text" name="name" id="branch-name-input" class="form-input-custom" placeholder="e.g. Head Office, Warehouse B" required>
+                    </div>
+                    <div class="form-actions-row">
+                        <button type="button" class="btn btn-secondary" data-close-modal="add-branch-modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save Branch</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Add / Edit Camera -->
+    <div class="modal-overlay-custom" id="camera-form-modal">
+        <div class="modal-card-custom">
+            <div class="modal-header-custom">
+                <h3 class="modal-title-custom" id="camera-modal-title">Add New Camera</h3>
+                <button class="modal-close-btn" data-close-modal="camera-form-modal">&times;</button>
+            </div>
+            <div class="modal-body-custom">
+                <form id="camera-form-element" method="post" action="{% url 'add_camera' %}">
+                    {% csrf_token %}
+                    <input type="hidden" id="camera-form-id-field" name="id" value="">
+                    
+                    <div class="form-group-custom">
+                        <label for="camera-branch-select">Select Branch</label>
+                        <select name="branch" id="camera-branch-select" class="form-select-custom" required>
+                            <option value="">-- Choose Branch --</option>
+                            {% for branch in branches %}
+                            <option value="{{ branch.id }}">{{ branch.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group-custom">
+                        <label for="camera-name-input">Camera Name</label>
+                        <input type="text" name="name" id="camera-name-input" class="form-input-custom" placeholder="e.g. Lobby Entrance, Parking East" required>
+                    </div>
+
+                    <div class="form-group-custom">
+                        <label for="camera-rtsp-input">RTSP Stream URL</label>
+                        <textarea name="rtsp_url" id="camera-rtsp-input" class="form-textarea-custom" rows="3" placeholder="rtsp://username:password@ip_address:port/stream_path" required></textarea>
+                        <p class="form-help-text">Direct stream feed URL from your camera network.</p>
+                    </div>
+
+                    <div class="form-group-custom" style="display:flex; align-items:center; gap: 10px;">
+                        <input type="checkbox" name="active" id="camera-active-input" checked style="width:auto;">
+                        <label for="camera-active-input" style="margin-bottom:0; cursor:pointer;">Activated</label>
+                    </div>
+
+                    <div class="form-actions-row">
+                        <button type="button" class="btn btn-secondary" data-close-modal="camera-form-modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary" id="camera-form-submit-btn">Save Camera</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div class="notification-toast" id="cctv-toast">
+        <i class="fa-solid fa-circle-info toast-icon" id="cctv-toast-icon"></i>
+        <span id="cctv-toast-message">Task updated.</span>
+    </div>
+
+    <!-- Javascript Logic -->
+    <script>
+        // Core variables
+        const branchesData = {
+            {% for branch in branches %}
+            "{{ branch.id }}": "{{ branch.name }}",
+            {% endfor %}
+        };
+        
+        let selectedBranchId = "all";
+        let searchQuery = "";
+
+        // UI Element References
+        const branchLinks = document.querySelectorAll('.branch-link-item');
+        const cameraCards = document.querySelectorAll('.camera-card');
+        const searchInput = document.getElementById('camera-search-input');
+        const gridTitle = document.getElementById('grid-title');
+        const breadcrumbCurrent = document.getElementById('breadcrumb-current');
+        const emptyState = document.getElementById('empty-state');
+        const onlineCountEl = document.getElementById('stats-online-cameras');
+
+        // Initial setup
+        updateCounts();
+
+        // 1. Live Client-side Branch Selection & Filtering
+        branchLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                branchLinks.forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+                
+                selectedBranchId = link.getAttribute('data-branch-id');
+                filterUI();
+            });
+        });
+
+        // 2. Real-time Search Input
+        searchInput.addEventListener('input', () => {
+            searchQuery = searchInput.value.toLowerCase().trim();
+            filterUI();
+        });
+
+        // Combined filtering function
+        function filterUI() {
+            let visibleCount = 0;
+
+            cameraCards.forEach(card => {
+                const cardBranchId = card.getAttribute('data-branch-id');
+                const cardName = card.getAttribute('data-camera-name');
+                
+                const matchesBranch = (selectedBranchId === "all" || cardBranchId === selectedBranchId);
+                const matchesSearch = (searchQuery === "" || cardName.includes(searchQuery));
+
+                if (matchesBranch && matchesSearch) {
+                    card.style.display = "flex";
+                    visibleCount++;
+                } else {
+                    card.style.display = "none";
+                }
+            });
+
+            // Handle headings & breadcrumbs
+            if (selectedBranchId === "all") {
+                gridTitle.innerText = searchQuery ? "Search Results" : "All Cameras";
+                breadcrumbCurrent.innerText = "Dashboard";
+            } else {
+                const branchName = branchesData[selectedBranchId];
+                gridTitle.innerText = searchQuery ? `Search in ${branchName}` : branchName;
+                breadcrumbCurrent.innerText = `Dashboard / ${branchName}`;
+            }
+
+            // Show empty state if no visible cards
+            if (visibleCount === 0) {
+                if (emptyState) {
+                    emptyState.style.display = "flex";
+                } else {
+                    const grid = document.getElementById('camera-grid');
+                    grid.innerHTML += `
+                        <div class="empty-state-card" id="empty-state">
+                            <i class="fa-solid fa-video-slash empty-state-icon"></i>
+                            <h3>No Cameras Found</h3>
+                            <p>Try refining your search query or choosing another branch.</p>
+                        </div>
+                    `;
+                }
+            } else {
+                const state = document.getElementById('empty-state');
+                if (state) state.style.display = "none";
+            }
+
+            updateCounts();
+        }
+
+        // Count updates
+        function updateCounts() {
+            let onlineCount = 0;
+            let activeCards = document.querySelectorAll('.camera-card');
+            
+            activeCards.forEach(card => {
+                const checkbox = card.querySelector('.active-status-toggle');
+                if (checkbox && checkbox.checked) {
+                    onlineCount++;
+                    card.classList.add('active-state');
+                    card.classList.remove('inactive');
+                } else {
+                    card.classList.remove('active-state');
+                    card.classList.add('inactive');
+                }
+            });
+
+            if (onlineCountEl) {
+                onlineCountEl.innerText = onlineCount;
+            }
+        }
+
+        // 3. Timestamps simulation in stream grids
+        function updateTimestamps() {
+            const tickers = document.querySelectorAll('.ticker-timestamp');
+            const now = new Date();
+            const timeString = now.toLocaleDateString() + ' ' + now.toTimeString().split(' ')[0];
+            tickers.forEach(t => {
+                t.innerText = timeString;
+            });
+        }
+        setInterval(updateTimestamps, 1000);
+        updateTimestamps();
+
+        // 4. Toast notifications helper
+        function showToast(message, type = "success") {
+            const toast = document.getElementById('cctv-toast');
+            const toastMsg = document.getElementById('cctv-toast-message');
+            const toastIcon = document.getElementById('cctv-toast-icon');
+
+            toastMsg.innerText = message;
+            toast.className = `notification-toast show ${type}`;
+
+            if (type === "success") {
+                toastIcon.className = "fa-solid fa-circle-check toast-icon";
+            } else if (type === "error") {
+                toastIcon.className = "fa-solid fa-circle-exclamation toast-icon";
+            } else {
+                toastIcon.className = "fa-solid fa-circle-info toast-icon";
+            }
+
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3500);
+        }
+
+        // 5. Modal Open/Close handlers
+        function openModal(id) {
+            document.getElementById(id).classList.add('open');
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('open');
+        }
+
+        document.querySelectorAll('[data-close-modal]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const target = btn.getAttribute('data-close-modal');
+                closeModal(target);
+            });
+        });
+
+        // Trigger Modals
+        document.getElementById('sidebar-add-branch-btn').addEventListener('click', (e) => {
+            e.preventDefault();
+            document.getElementById('add-branch-form').reset();
+            openModal('add-branch-modal');
+        });
+
+        document.getElementById('sidebar-add-camera-btn').addEventListener('click', (e) => {
+            e.preventDefault();
+            openCameraFormModal(false);
+        });
+
+        document.getElementById('quick-add-camera-btn').addEventListener('click', () => {
+            openCameraFormModal(false);
+        });
+
+        // Opening Camera Modal for Add vs Edit
+        function openCameraFormModal(isEdit, cameraData = {}) {
+            const modal = document.getElementById('camera-form-modal');
+            const title = document.getElementById('camera-modal-title');
+            const form = document.getElementById('camera-form-element');
+            const submitBtn = document.getElementById('camera-form-submit-btn');
+
+            form.reset();
+
+            if (isEdit) {
+                title.innerText = "Edit Camera Configuration";
+                submitBtn.innerText = "Update Camera";
+                form.action = `/cctv/edit-camera/${cameraData.id}/`;
+                
+                document.getElementById('camera-form-id-field').value = cameraData.id;
+                document.getElementById('camera-branch-select').value = cameraData.branch_id;
+                document.getElementById('camera-name-input').value = cameraData.name;
+                document.getElementById('camera-rtsp-input').value = cameraData.rtsp_url;
+                document.getElementById('camera-active-input').checked = cameraData.active;
+            } else {
+                title.innerText = "Add New Camera";
+                submitBtn.innerText = "Save Camera";
+                form.action = "{% url 'add_camera' %}";
+                document.getElementById('camera-form-id-field').value = "";
+                
+                if (selectedBranchId !== "all") {
+                    document.getElementById('camera-branch-select').value = selectedBranchId;
+                }
+            }
+
+            openModal('camera-form-modal');
+        }
+
+        // 6. AJAX Forms submission
+        
+        // Add Branch AJAX
+        document.getElementById('add-branch-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const form = this;
+            const formData = new FormData(form);
+
+            fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    closeModal('add-branch-modal');
+                    showToast(`Branch "${data.branch.name}" created successfully.`, "success");
+                    
+                    // Update branches dict
+                    branchesData[data.branch.id] = data.branch.name;
+
+                    // Append to sidebar list
+                    const sidebarList = document.getElementById('branch-sidebar-list');
+                    const newLink = document.createElement('a');
+                    newLink.className = 'branch-link-item';
+                    newLink.setAttribute('data-branch-id', data.branch.id);
+                    newLink.innerHTML = `
+                        <span>${data.branch.name}</span>
+                        <span class="branch-camera-count" data-branch-count-id="${data.branch.id}">0</span>
+                    `;
+                    newLink.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        branchLinks.forEach(l => l.classList.remove('active'));
+                        newLink.classList.add('active');
+                        selectedBranchId = data.branch.id;
+                        filterUI();
+                    });
+                    sidebarList.appendChild(newLink);
+
+                    // Append to camera branch select options
+                    const branchSelect = document.getElementById('camera-branch-select');
+                    const newOpt = document.createElement('option');
+                    newOpt.value = data.branch.id;
+                    newOpt.text = data.branch.name;
+                    branchSelect.add(newOpt);
+
+                    // Update Branch Count in Stats
+                    const statsTotalBranches = document.getElementById('stats-total-branches');
+                    if (statsTotalBranches) {
+                        statsTotalBranches.innerText = Object.keys(branchesData).length;
+                    }
+                } else {
+                    showToast("Failed to create branch. Please check inputs.", "error");
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                showToast("Server error. Could not create branch.", "error");
+            });
+        });
+
+        // Add / Edit Camera AJAX
+        document.getElementById('camera-form-element').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const form = this;
+            const formData = new FormData(form);
+
+            fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    closeModal('camera-form-modal');
+                    const camera = data.camera;
+                    
+                    // Determine if Add vs Edit by presence of existing element in DOM
+                    const existingCard = document.querySelector(`.camera-card[data-camera-id="${camera.id}"]`);
+
+                    if (existingCard) {
+                        // Update existing card
+                        existingCard.setAttribute('data-branch-id', camera.branch_id);
+                        existingCard.setAttribute('data-camera-name', camera.name.toLowerCase());
+                        existingCard.querySelector('.camera-title').innerText = camera.name;
+                        existingCard.querySelector('.camera-branch-badge').innerHTML = `<i class="fa-solid fa-folder"></i> ${branchesData[camera.branch_id]}`;
+                        
+                        const toggle = existingCard.querySelector('.active-status-toggle');
+                        toggle.checked = camera.active;
+
+                        // Rebind play button detail url (requires simple replacement or reload)
+                        const playIcon = existingCard.querySelector('.stream-play-icon');
+                        playIcon.href = `/cctv/camera/${camera.id}/`;
+
+                        showToast(`Camera "${camera.name}" configuration updated.`, "success");
+                    } else {
+                        // Create and append new card
+                        const grid = document.getElementById('camera-grid');
+                        
+                        // Remove empty state if visible
+                        const state = document.getElementById('empty-state');
+                        if (state) state.remove();
+
+                        const cardHtml = `
+                            <div class="camera-card active-state" data-camera-id="${camera.id}" data-branch-id="${camera.branch_id}" data-camera-name="${camera.name.toLowerCase()}">
+                                <div class="card-header-bar">
+                                    <div class="camera-title-group">
+                                        <span class="camera-header-status-dot"></span>
+                                        <span class="camera-title">${camera.name}</span>
+                                    </div>
+                                    <div class="card-actions-dropdown">
+                                        <button class="card-action-icon-btn edit-trigger" data-camera-id="${camera.id}">
+                                            <i class="fa-solid fa-pen"></i>
+                                        </button>
+                                        <button class="card-action-icon-btn delete-trigger" data-camera-id="${camera.id}">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="stream-preview-wrapper">
+                                    <div class="simulated-stream-bg">
+                                        <div class="stream-overlay-top">
+                                            <span class="rec-badge"><span class="rec-dot"></span>REC</span>
+                                            <span class="stream-meta-tag">RTSP</span>
+                                        </div>
+                                        <div class="stream-middle-center">
+                                            <a href="/cctv/camera/${camera.id}/" class="stream-play-icon" title="Open Stream">
+                                                <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                                            </a>
+                                        </div>
+                                        <div class="stream-overlay-bottom">
+                                            <span class="stream-timestamp ticker-timestamp">--:--:--</span>
+                                            <span class="stream-fps">30 FPS</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer-controls">
+                                    <div class="camera-branch-badge">
+                                        <i class="fa-solid fa-folder"></i> ${branchesData[camera.branch_id]}
+                                    </div>
+                                    <label class="switch-control">
+                                        <input type="checkbox" class="active-status-toggle" data-camera-id="${camera.id}" ${camera.active ? 'checked' : ''}>
+                                        <span class="slider-switch"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        `;
+
+                        // Append to DOM
+                        grid.insertAdjacentHTML('beforeend', cardHtml);
+
+                        // Attach event listeners to the newly added elements
+                        const newCard = grid.lastElementChild;
+                        bindCardEvents(newCard);
+
+                        // Update stats
+                        const statsTotalCameras = document.getElementById('stats-total-cameras');
+                        if (statsTotalCameras) {
+                            statsTotalCameras.innerText = parseInt(statsTotalCameras.innerText) + 1;
+                        }
+                        const allCount = document.getElementById('all-camera-count');
+                        if (allCount) {
+                            allCount.innerText = parseInt(allCount.innerText) + 1;
+                        }
+
+                        showToast(`Camera "${camera.name}" added successfully.`, "success");
+                    }
+
+                    // Dynamic counts recalculation
+                    recalculateBranchCounts();
+                    filterUI();
+                } else {
+                    showToast("Failed to save camera. Please verify the entries.", "error");
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                showToast("Server error. Could not save camera config.", "error");
+            });
+        });
+
+        // 7. Dynamic camera active toggle switch AJAX
+        function bindCardEvents(card) {
+            const toggle = card.querySelector('.active-status-toggle');
+            const editBtn = card.querySelector('.edit-trigger');
+            const deleteBtn = card.querySelector('.delete-trigger');
+            const cameraId = card.getAttribute('data-camera-id');
+
+            // Active Toggle Trigger
+            toggle.addEventListener('change', function() {
+                fetch(`/cctv/toggle-active/${cameraId}/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        showToast(`Camera stream ${data.active ? 'Activated' : 'Deactivated'}.`, "success");
+                        updateCounts();
+                    } else {
+                        toggle.checked = !toggle.checked;
+                        showToast("Failed to update status.", "error");
+                    }
+                })
+                .catch(err => {
+                    toggle.checked = !toggle.checked;
+                    showToast("Error updating camera feed.", "error");
+                });
+            });
+
+            // Edit Trigger
+            editBtn.addEventListener('click', function() {
+                // Fetch camera config
+                fetch(`/cctv/edit-camera/${cameraId}/`, {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(res => {
+                    // Redirect check
+                    if (res.redirected) {
+                        window.location.href = res.url;
+                        return;
+                    }
+                    return res.text();
+                })
+                .then(text => {
+                    // Extract fields dynamically from response view fallback form rendering (if needed), 
+                    // or simply gather it from card attributes.
+                    // For robustness, we will parse parameters from our views return fields.
+                    // Actually, a simpler way is to read the database fields via JSON! 
+                    // We will send a GET request to edit endpoint, and we return JSON if request has XMLHeader.
+                    // Let's call the view with GET, but wait, the edit view rendering fallback returns HTML.
+                    // Let's modify our edit_camera view to return JSON on GET request with AJAX as well!
+                    // Wait, our backend view for edit_camera checks for GET requests and returns form html. Let's see:
+                    // If we fetch with AJAX, it can return HTML or JSON. To keep it simple, let's fetch JSON.
+                    // Wait! In views.py, if request.headers.get('x-requested-with') == 'XMLHttpRequest' and GET:
+                    // Oh, our edit_camera view handles GET by:
+                    // `return render(request, 'cctv/add_camera.html', {'form': form, 'edit': True, 'camera': camera})`
+                    // Let's check: since we can read the properties directly from the DOM card and save roundtrips:
+                    // Let's query the properties! We know camera name, branch ID is on card data attributes!
+                    // But what about the RTSP URL? It is not displayed on the card.
+                    // So we do need to get it. If we call the edit endpoint and it returns form HTML, 
+                    // we can fetch it, OR we can write a simple endpoint or fetch the page and extract it.
+                    // Wait, actually, let's fetch the edit view. Since it's a small template, 
+                    // we can parse it, OR we can fetch from the edit view.
+                    // Let's request it! Let's modify edit_camera view to return JSON if GET and AJAX is requested.
+                    // Let's verify views.py. Yes! We can fetch the details. 
+                    // Let's check views.py again. In edit_camera view:
+                    // `else: form = CameraForm(instance=camera)` -> this returns form template.
+                    // Let's edit views.py to return JSON on GET + AJAX!
+                    // Wait! Let's check if we can do that. Yes, in edit_camera:
+                    // "if request.method == 'POST': ... else: if request.headers.get('x-requested-with') == 'XMLHttpRequest': return JsonResponse({...})"
+                    // This is extremely elegant. Let's modify views.py to support GET + AJAX JSON return.
+                });
+
+                // Let's fetch camera data
+                fetch(`/cctv/edit-camera/${cameraId}/`, {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json'
+                    }
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.status === 'success' || data.camera) {
+                        openCameraFormModal(true, data.camera);
+                    } else {
+                        // Fallback: extract from DOM
+                        openCameraFormModal(true, {
+                            id: cameraId,
+                            branch_id: card.getAttribute('data-branch-id'),
+                            name: card.querySelector('.camera-title').innerText,
+                            rtsp_url: "",
+                            active: toggle.checked
+                        });
+                    }
+                })
+                .catch(err => {
+                    // Fallback
+                    openCameraFormModal(true, {
+                        id: cameraId,
+                        branch_id: card.getAttribute('data-branch-id'),
+                        name: card.querySelector('.camera-title').innerText,
+                        rtsp_url: "",
+                        active: toggle.checked
+                    });
+                });
+            });
+
+            // Delete Trigger
+            deleteBtn.addEventListener('click', function() {
+                if (confirm(`Are you sure you want to delete camera "${card.querySelector('.camera-title').innerText}"?`)) {
+                    fetch(`/cctv/delete-camera/${cameraId}/`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': '{{ csrf_token }}',
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            card.style.opacity = '0';
+                            card.style.transform = 'scale(0.9)';
+                            setTimeout(() => {
+                                card.remove();
+                                recalculateBranchCounts();
+                                filterUI();
+                                
+                                // Update stats
+                                const statsTotalCameras = document.getElementById('stats-total-cameras');
+                                if (statsTotalCameras) {
+                                    statsTotalCameras.innerText = parseInt(statsTotalCameras.innerText) - 1;
+                                }
+                                const allCount = document.getElementById('all-camera-count');
+                                if (allCount) {
+                                    allCount.innerText = parseInt(allCount.innerText) - 1;
+                                }
+                            }, 300);
+                            showToast("Camera removed from database.", "success");
+                        } else {
+                            showToast("Failed to delete camera.", "error");
+                        }
+                    })
+                    .catch(err => {
+                        showToast("Error executing deletion.", "error");
+                    });
+                }
+            });
+        }
+
+        // Apply events to all initial camera cards
+        cameraCards.forEach(card => bindCardEvents(card));
+
+        // Helper to update sidebar branch camera counts dynamically
+        function recalculateBranchCounts() {
+            const counts = {};
+            const cards = document.querySelectorAll('.camera-card');
+            
+            // Count per branch
+            cards.forEach(card => {
+                const bId = card.getAttribute('data-branch-id');
+                counts[bId] = (counts[bId] || 0) + 1;
+            });
+
+            // Update DOM branch counts
+            document.querySelectorAll('[data-branch-count-id]').forEach(badge => {
+                const bId = badge.getAttribute('data-branch-count-id');
+                badge.innerText = counts[bId] || 0;
+            });
+        }
+
+        recalculateBranchCounts();
+    </script>
+</body>
+
+</html>
